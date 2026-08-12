@@ -15,6 +15,8 @@ interface ParallelViewProps {
   chapter: number
   primaryChapter: Chapter | null
   selectedVerse: number | null
+  /** When false, suppress the inline verse action bar (the study panel owns it). */
+  inlineActions?: boolean
   onSelectVerse: (verse: number | null) => void
   onOpenNote: (verse: number) => void
   onOpenContext: (verse: number) => void
@@ -30,6 +32,7 @@ export function ParallelView({
   chapter,
   primaryChapter,
   selectedVerse,
+  inlineActions = true,
   onSelectVerse,
   onOpenNote,
   onOpenContext,
@@ -91,6 +94,7 @@ export function ParallelView({
               highlightColor={colorFor(key)}
               hasNote={hasNote(key)}
               selected={selectedVerse === num}
+              inlineActions={inlineActions}
               onSelect={() => onSelectVerse(selectedVerse === num ? null : num)}
               onSetHighlight={(color) => setHighlight(key, color)}
               onClearHighlight={() => removeHighlight(key)}
@@ -121,6 +125,7 @@ interface ParallelRowProps {
   highlightColor: HighlightColor | null
   hasNote: boolean
   selected: boolean
+  inlineActions?: boolean
   onSelect: () => void
   onSetHighlight: (color: HighlightColor) => void
   onClearHighlight: () => void
@@ -135,6 +140,7 @@ function ParallelRow({
   highlightColor,
   hasNote,
   selected,
+  inlineActions = true,
   onSelect,
   onSetHighlight,
   onClearHighlight,
@@ -169,7 +175,7 @@ function ParallelRow({
         </div>
       </div>
 
-      {selected && (
+      {selected && inlineActions && (
         <div className="verse-actions" role="toolbar" aria-label={`Actions for verse ${num}`}>
           <HighlightMenu current={highlightColor} onPick={onSetHighlight} onClear={onClearHighlight} />
           <div className="verse-actions-buttons">

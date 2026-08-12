@@ -33,28 +33,22 @@ export function SideRail() {
       <div className="rail-top">
         <Link to="/" className="rail-brand" aria-label="Bible Study home">
           <span className="rail-brand-mark" aria-hidden="true">
-            <Icon name="sparkle" size={20} />
+            <Icon name="sparkle" size={22} />
           </span>
           <span className="rail-item-label rail-brand-text">Bible Study</span>
         </Link>
-        <button
-          type="button"
-          className="rail-toggle"
-          onClick={() => setExpanded((e) => !e)}
-          aria-label={expanded ? 'Collapse navigation' : 'Expand navigation'}
-          aria-expanded={expanded}
-        >
-          <Icon name="menu" />
-        </button>
       </div>
 
+      <div className="rail-spacer" aria-hidden="true" />
+
+      {/* Primary nav, vertically centered in the rail. */}
       <div className="rail-nav">
         <Link
           to="/"
           className={'rail-item' + (onHome ? ' is-active' : '')}
           aria-current={onHome ? 'page' : undefined}
         >
-          <Icon name="home" />
+          <Icon name="home" size={24} />
           <span className="rail-item-label">Home</span>
         </Link>
         <Link
@@ -62,7 +56,7 @@ export function SideRail() {
           className={'rail-item' + (onReader ? ' is-active' : '')}
           aria-current={onReader ? 'page' : undefined}
         >
-          <Icon name="book" />
+          <Icon name="book" size={24} />
           <span className="rail-item-label">Read</span>
         </Link>
         <Link
@@ -70,19 +64,27 @@ export function SideRail() {
           className={'rail-item' + (onNotes ? ' is-active' : '')}
           aria-current={onNotes ? 'page' : undefined}
         >
-          <Icon name="note" />
+          <Icon name="note" size={24} />
           <span className="rail-item-label">Notes</span>
         </Link>
       </div>
 
       <div className="rail-spacer" aria-hidden="true" />
 
-      <div className="rail-divider" aria-hidden="true" />
-
       <div className="rail-bottom">
         <MusicControls variant="rail" />
         <FontControls variant="rail" />
         <ThemeToggle variant="rail" />
+        <button
+          type="button"
+          className="rail-item rail-toggle-item"
+          onClick={() => setExpanded((e) => !e)}
+          aria-label={expanded ? 'Collapse navigation' : 'Expand navigation'}
+          aria-expanded={expanded}
+        >
+          <Icon name="menu" size={24} />
+          <span className="rail-item-label">{expanded ? 'Collapse' : 'Menu'}</span>
+        </button>
       </div>
     </nav>
   )

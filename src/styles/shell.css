@@ -57,28 +57,10 @@
   white-space: nowrap;
 }
 
-.rail-toggle {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-}
-.rail-toggle:hover {
-  background: var(--surface-hover);
-  color: var(--text);
-}
-
 .rail-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.5rem;
   padding: 0.4rem;
 }
 
@@ -88,38 +70,34 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.9rem;
   width: 100%;
+  min-height: 2.9rem;
   border: none;
   background: transparent;
   color: var(--text-muted);
   font: inherit;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   text-align: left;
-  padding: 0.55rem 0.7rem;
+  padding: 0.6rem 0.7rem;
   border-radius: var(--radius-md);
   cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 .rail-item:hover {
   background: var(--surface-hover);
   color: var(--text);
   text-decoration: none;
 }
+/* Simple, Instagram-style active state: the icon takes the brand color, no
+   filled pill or bar. */
 .rail-item.is-active {
-  background: var(--bg-sunken);
-  color: var(--text);
+  color: var(--accent);
+  font-weight: 700;
 }
-/* Inset accent bar on the active item. */
-.rail-item.is-active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.3rem;
-  bottom: 0.3rem;
-  width: 3px;
-  border-radius: 3px;
-  background: var(--accent);
+.rail-item.is-active:hover {
+  background: transparent;
 }
 .rail-item-label {
   overflow: hidden;

@@ -125,7 +125,7 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
 
   const verses = primary.chapter?.verses ?? []
   const noteKey = noteVerse != null ? makeKey(book, chapter, noteVerse) : null
-  const showStudyPanel = !settings.parallelEnabled && studyOpen
+  const showStudyPanel = studyOpen
 
   return (
     <div className="reader reader-focus">
@@ -160,17 +160,15 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
           >
             <Icon name="columns" size={16} /> Parallel
           </button>
-          {!settings.parallelEnabled && (
-            <button
-              type="button"
-              className={'button ghost small' + (studyOpen ? ' is-active' : '')}
-              onClick={() => setStudyOpen((o) => !o)}
-              aria-pressed={studyOpen}
-              aria-label="Toggle study panel"
-            >
-              <Icon name="sidebar" size={16} /> Study
-            </button>
-          )}
+          <button
+            type="button"
+            className={'button ghost small' + (studyOpen ? ' is-active' : '')}
+            onClick={() => setStudyOpen((o) => !o)}
+            aria-pressed={studyOpen}
+            aria-label="Toggle study panel"
+          >
+            <Icon name="sidebar" size={16} /> Study
+          </button>
         </div>
       </div>
 
@@ -228,6 +226,7 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
                 chapter={chapter}
                 primaryChapter={primary.chapter}
                 selectedVerse={selectedVerse}
+                inlineActions={!showStudyPanel}
                 onSelectVerse={setSelectedVerse}
                 onOpenNote={setNoteVerse}
                 onOpenContext={setContextVerse}
