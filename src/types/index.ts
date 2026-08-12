@@ -11,6 +11,18 @@ export interface BookMeta {
   chapterCount: number
   /** Short 1-2 sentence introduction. */
   intro: string
+  /** Traditional/most-accepted author, honest about disputed attribution. */
+  author: string
+  /** Approximate date of writing, e.g. "c. 1446–1406 BC". */
+  written: string
+  /** Where it was written or its origin/setting. */
+  place: string
+  /** Original recipients/audience. */
+  audience: string
+  /** Category, e.g. "Law / Torah", "Gospel", "Pauline Epistle". */
+  genre: string
+  /** Short phrase of key themes. */
+  themes: string
 }
 
 export interface Verse {

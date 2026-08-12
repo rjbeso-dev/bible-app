@@ -53,18 +53,6 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-
-      <footer className="app-footer">
-        <span className="muted">
-          Free translations from{' '}
-          <a href="https://bible-api.com" target="_blank" rel="noreferrer">
-            bible-api.com
-          </a>
-          . ESV® © Crossway and NLT © Tyndale House Foundation are shown when
-          the site is configured with their API keys. Notes and highlights are
-          saved in your browser.
-        </span>
-      </footer>
     </div>
   )
 }

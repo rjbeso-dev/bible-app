@@ -53,6 +53,15 @@ describe('data/books: chapter counts', () => {
       expect(b.intro.length).toBeGreaterThan(0)
     }
   })
+
+  it('gives every book complete reference metadata', () => {
+    const fields = ['author', 'written', 'place', 'audience', 'genre', 'themes'] as const
+    for (const b of BOOKS) {
+      for (const field of fields) {
+        expect(b[field].trim().length).toBeGreaterThan(0)
+      }
+    }
+  })
 })
 
 describe('data/books: getBook lookup', () => {

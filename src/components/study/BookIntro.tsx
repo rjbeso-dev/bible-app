@@ -32,6 +32,32 @@ export function BookIntro({ book, open, onClose }: BookIntroProps) {
       </div>
       <h2 className="book-intro-title">{meta.name}</h2>
       <p className="book-intro-body">{meta.intro}</p>
+      <dl className="book-intro-meta">
+        <div className="book-intro-meta-row">
+          <dt>Author</dt>
+          <dd>{meta.author}</dd>
+        </div>
+        <div className="book-intro-meta-row">
+          <dt>Written</dt>
+          <dd>{meta.written}</dd>
+        </div>
+        <div className="book-intro-meta-row">
+          <dt>Where</dt>
+          <dd>{meta.place}</dd>
+        </div>
+        <div className="book-intro-meta-row">
+          <dt>Audience</dt>
+          <dd>{meta.audience}</dd>
+        </div>
+        <div className="book-intro-meta-row">
+          <dt>Genre</dt>
+          <dd>{meta.genre}</dd>
+        </div>
+        <div className="book-intro-meta-row">
+          <dt>Themes</dt>
+          <dd>{meta.themes}</dd>
+        </div>
+      </dl>
     </aside>
   )
 }

@@ -7,6 +7,10 @@ import type { BookMeta } from '../types'
  * (e.g. "1 corinthians") and as the route/storage key. `name` is the
  * display label. Chapter counts follow the standard Masoretic/Protestant
  * versification used by bible-api.com's default translations.
+ *
+ * `author`, `written`, `place`, `audience`, `genre`, and `themes` reflect
+ * widely-accepted traditional/mainstream scholarship, kept concise and
+ * honest about disputed or unknown authorship.
  */
 export const BOOKS: BookMeta[] = [
   // ----- Old Testament -----
@@ -17,6 +21,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 50,
     intro:
       'The book of beginnings: creation, the fall, the flood, and the calling of Abraham and his family. It traces the origins of the world and of God’s covenant people.',
+    author: 'Moses (traditional)',
+    written: 'c. 1446–1406 BC',
+    place: 'Wilderness (Sinai/wanderings)',
+    audience: 'Israel',
+    genre: 'Law / Torah',
+    themes: 'Creation, covenant, promise',
   },
   {
     id: 'exodus',
@@ -25,6 +35,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 40,
     intro:
       'Israel’s deliverance from slavery in Egypt through Moses, the giving of the Law at Sinai, and the building of the tabernacle.',
+    author: 'Moses (traditional)',
+    written: 'c. 1446–1406 BC',
+    place: 'Wilderness of Sinai',
+    audience: 'Israel',
+    genre: 'Law / Torah',
+    themes: 'Deliverance, covenant, law, presence',
   },
   {
     id: 'leviticus',
@@ -33,6 +49,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 27,
     intro:
       'Laws for worship, sacrifice, and holy living given to Israel through Moses, centered on how a holy God can dwell among His people.',
+    author: 'Moses (traditional)',
+    written: 'c. 1446–1406 BC',
+    place: 'Wilderness of Sinai',
+    audience: 'Israel, the priests',
+    genre: 'Law / Torah',
+    themes: 'Holiness, sacrifice, worship',
   },
   {
     id: 'numbers',
@@ -41,6 +63,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 36,
     intro:
       'Israel’s wilderness wanderings from Sinai toward the promised land, including two censuses and repeated tests of faith.',
+    author: 'Moses (traditional)',
+    written: 'c. 1446–1406 BC',
+    place: 'Wilderness of Sinai and Moab',
+    audience: 'Israel',
+    genre: 'Law / Torah',
+    themes: 'Wandering, testing, God’s faithfulness',
   },
   {
     id: 'deuteronomy',
@@ -49,6 +77,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 34,
     intro:
       'Moses’ farewell addresses restating the Law for a new generation on the edge of Canaan, urging wholehearted love and obedience to God.',
+    author: 'Moses (traditional)',
+    written: 'c. 1406 BC',
+    place: 'Plains of Moab',
+    audience: 'Israel',
+    genre: 'Law / Torah',
+    themes: 'Covenant renewal, obedience, love',
   },
   {
     id: 'joshua',
@@ -57,6 +91,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 24,
     intro:
       'The conquest and division of the promised land under Joshua, showing God’s faithfulness to His promises to Israel.',
+    author: 'Joshua (traditional)',
+    written: 'c. 1400–1370 BC',
+    place: 'Canaan',
+    audience: 'Israel',
+    genre: 'History',
+    themes: 'Conquest, inheritance, faithfulness',
   },
   {
     id: 'judges',
@@ -65,6 +105,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 21,
     intro:
       'A turbulent era of Israel’s repeated apostasy and rescue through raised-up leaders called judges, when everyone did what was right in their own eyes.',
+    author: 'Unknown (traditionally Samuel)',
+    written: 'c. 1050–1000 BC',
+    place: 'Israel',
+    audience: 'Israel',
+    genre: 'History',
+    themes: 'Apostasy, deliverance, moral decline',
   },
   {
     id: 'ruth',
@@ -73,6 +119,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 4,
     intro:
       'A short story of loyalty and redemption in which a Moabite widow becomes an ancestor of King David through the kindness of Boaz.',
+    author: 'Unknown',
+    written: 'c. 1000–900 BC',
+    place: 'Israel',
+    audience: 'Israel',
+    genre: 'History',
+    themes: 'Loyalty, redemption, providence',
   },
   {
     id: '1 samuel',
@@ -81,6 +133,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 31,
     intro:
       'The transition from the judges to the monarchy, featuring Samuel, Israel’s first king Saul, and the rise of the young David.',
+    author: 'Unknown (compiled)',
+    written: 'c. 930–722 BC',
+    place: 'Israel',
+    audience: 'Israel',
+    genre: 'History',
+    themes: 'Kingship, leadership, God’s sovereignty',
   },
   {
     id: '2 samuel',
@@ -89,6 +147,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 24,
     intro:
       'The reign of King David, including God’s covenant with him, his triumphs, and the consequences of his failures.',
+    author: 'Unknown (compiled)',
+    written: 'c. 930–722 BC',
+    place: 'Israel',
+    audience: 'Israel',
+    genre: 'History',
+    themes: 'Covenant, kingship, sin’s consequences',
   },
   {
     id: '1 kings',
@@ -97,6 +161,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 22,
     intro:
       'Solomon’s reign and the building of the temple, followed by the divided kingdom and the ministry of the prophet Elijah.',
+    author: 'Unknown (compiled)',
+    written: 'c. 560–540 BC',
+    place: 'Israel / Babylon (exile)',
+    audience: 'Israel',
+    genre: 'History',
+    themes: 'Kingship, idolatry, divided kingdom',
   },
   {
     id: '2 kings',
@@ -105,6 +175,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 25,
     intro:
       'The decline of the divided kingdoms of Israel and Judah, ending in exile, with the prophetic ministry of Elisha.',
+    author: 'Unknown (compiled)',
+    written: 'c. 560–540 BC',
+    place: 'Israel / Babylon (exile)',
+    audience: 'Israel',
+    genre: 'History',
+    themes: 'Judgment, exile, the prophetic word',
   },
   {
     id: '1 chronicles',
@@ -113,6 +189,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 29,
     intro:
       'A retelling of Israel’s history through genealogies and the reign of David, emphasizing worship and the temple.',
+    author: 'Unknown (traditionally Ezra)',
+    written: 'c. 450–400 BC',
+    place: 'Jerusalem (post-exilic)',
+    audience: 'Returned exiles',
+    genre: 'History',
+    themes: 'Worship, temple, the Davidic line',
   },
   {
     id: '2 chronicles',
@@ -121,6 +203,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 36,
     intro:
       'The history of Judah’s kings from Solomon to the exile, highlighting the temple and calls to faithful worship.',
+    author: 'Unknown (traditionally Ezra)',
+    written: 'c. 450–400 BC',
+    place: 'Jerusalem (post-exilic)',
+    audience: 'Returned exiles',
+    genre: 'History',
+    themes: 'Temple worship, faithfulness, kings',
   },
   {
     id: 'ezra',
@@ -129,6 +217,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 10,
     intro:
       'The return of the exiles from Babylon and the rebuilding of the temple, with Ezra’s reforms to restore the Law.',
+    author: 'Ezra (traditional)',
+    written: 'c. 460–440 BC',
+    place: 'Jerusalem',
+    audience: 'Returned exiles',
+    genre: 'History',
+    themes: 'Restoration, temple, reform',
   },
   {
     id: 'nehemiah',
@@ -137,6 +231,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 13,
     intro:
       'The rebuilding of Jerusalem’s walls under Nehemiah and the spiritual renewal of the restored community.',
+    author: 'Nehemiah (traditional)',
+    written: 'c. 430–420 BC',
+    place: 'Jerusalem',
+    audience: 'Returned exiles',
+    genre: 'History',
+    themes: 'Rebuilding, renewal, leadership',
   },
   {
     id: 'esther',
@@ -145,6 +245,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 10,
     intro:
       'A Jewish queen in Persia risks her life to save her people from destruction, revealing God’s hidden providence.',
+    author: 'Unknown',
+    written: 'c. 470–460 BC',
+    place: 'Persia (Susa)',
+    audience: 'Jews of the diaspora',
+    genre: 'History',
+    themes: 'Providence, courage, deliverance',
   },
   {
     id: 'job',
@@ -153,6 +259,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 42,
     intro:
       'A righteous man’s intense suffering prompts a profound exploration of God’s justice, wisdom, and sovereignty.',
+    author: 'Unknown',
+    written: 'Uncertain (perhaps c. 6th century BC)',
+    place: 'Uz (narrative setting)',
+    audience: 'Israel',
+    genre: 'Wisdom / Poetry',
+    themes: 'Suffering, justice, God’s sovereignty',
   },
   {
     id: 'psalms',
@@ -161,6 +273,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 150,
     intro:
       'A collection of 150 songs and prayers spanning praise, lament, thanksgiving, and trust—the worship book of God’s people.',
+    author: 'David and others',
+    written: 'c. 1400–400 BC (compiled)',
+    place: 'Israel',
+    audience: 'Israel, worshippers',
+    genre: 'Wisdom / Poetry',
+    themes: 'Praise, lament, trust, worship',
   },
   {
     id: 'proverbs',
@@ -169,6 +287,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 31,
     intro:
       'Practical wisdom for daily life, teaching that the fear of the Lord is the beginning of knowledge.',
+    author: 'Solomon and others',
+    written: 'c. 950–700 BC',
+    place: 'Jerusalem',
+    audience: 'Israel, the young',
+    genre: 'Wisdom / Poetry',
+    themes: 'Wisdom, discipline, fear of the Lord',
   },
   {
     id: 'ecclesiastes',
@@ -177,6 +301,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 12,
     intro:
       'A candid reflection on the meaning of life "under the sun," concluding that we should fear God and keep His commandments.',
+    author: 'Solomon (traditional)',
+    written: 'c. 935 BC or later',
+    place: 'Jerusalem',
+    audience: 'Israel',
+    genre: 'Wisdom / Poetry',
+    themes: 'Meaning, vanity, fear of God',
   },
   {
     id: 'song of solomon',
@@ -185,6 +315,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 8,
     intro:
       'A lyrical celebration of love and desire between a bride and groom, long read as a picture of covenant love.',
+    author: 'Solomon (traditional)',
+    written: 'c. 950 BC',
+    place: 'Jerusalem',
+    audience: 'Israel',
+    genre: 'Wisdom / Poetry',
+    themes: 'Love, desire, covenant faithfulness',
   },
   {
     id: 'isaiah',
@@ -193,6 +329,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 66,
     intro:
       'Majestic prophecies of judgment and comfort, rich with promises of a coming Servant who would bring salvation.',
+    author: 'Isaiah (traditional)',
+    written: 'c. 740–680 BC',
+    place: 'Jerusalem',
+    audience: 'Judah',
+    genre: 'Major Prophet',
+    themes: 'Judgment, comfort, the coming Servant',
   },
   {
     id: 'jeremiah',
@@ -201,6 +343,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 52,
     intro:
       'The "weeping prophet" warns Judah of coming judgment while promising a new covenant written on the heart.',
+    author: 'Jeremiah',
+    written: 'c. 627–580 BC',
+    place: 'Jerusalem',
+    audience: 'Judah',
+    genre: 'Major Prophet',
+    themes: 'Judgment, repentance, new covenant',
   },
   {
     id: 'lamentations',
@@ -209,6 +357,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 5,
     intro:
       'Poems of grief over the fall of Jerusalem, yet with a famous affirmation of God’s steadfast, ever-new mercies.',
+    author: 'Jeremiah (traditional)',
+    written: 'c. 586 BC',
+    place: 'Jerusalem',
+    audience: 'Judah',
+    genre: 'Major Prophet',
+    themes: 'Grief, judgment, God’s mercy',
   },
   {
     id: 'ezekiel',
@@ -217,6 +371,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 48,
     intro:
       'Vivid visions and symbolic acts announcing judgment and then restoration, including the valley of dry bones.',
+    author: 'Ezekiel',
+    written: 'c. 593–571 BC',
+    place: 'Babylon (exile)',
+    audience: 'Exiled Israel',
+    genre: 'Major Prophet',
+    themes: 'Judgment, glory, restoration',
   },
   {
     id: 'daniel',
@@ -225,6 +385,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 12,
     intro:
       'Faithfulness under exile in Babylon paired with apocalyptic visions of God’s sovereignty over all kingdoms.',
+    author: 'Daniel (traditional)',
+    written: 'c. 605–530 BC',
+    place: 'Babylon',
+    audience: 'Exiled Israel',
+    genre: 'Major Prophet',
+    themes: 'Sovereignty, faithfulness, apocalyptic hope',
   },
   {
     id: 'hosea',
@@ -233,6 +399,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 14,
     intro:
       'The prophet’s troubled marriage dramatizes God’s faithful love for an unfaithful people and His call to return.',
+    author: 'Hosea',
+    written: 'c. 755–715 BC',
+    place: 'Israel (northern kingdom)',
+    audience: 'Israel',
+    genre: 'Minor Prophet',
+    themes: 'Unfaithfulness, judgment, God’s love',
   },
   {
     id: 'joel',
@@ -241,6 +413,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 3,
     intro:
       'A locust plague becomes a call to repentance and a promise that God will pour out His Spirit on all people.',
+    author: 'Joel',
+    written: 'Uncertain (c. 835–400 BC)',
+    place: 'Judah',
+    audience: 'Judah',
+    genre: 'Minor Prophet',
+    themes: 'Judgment, repentance, the Spirit',
   },
   {
     id: 'amos',
@@ -249,6 +427,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 9,
     intro:
       'A shepherd-prophet thunders against injustice and empty religion, calling for justice to roll down like waters.',
+    author: 'Amos',
+    written: 'c. 760–750 BC',
+    place: 'Israel (from Tekoa in Judah)',
+    audience: 'Israel',
+    genre: 'Minor Prophet',
+    themes: 'Justice, judgment, social righteousness',
   },
   {
     id: 'obadiah',
@@ -257,6 +441,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 1,
     intro:
       'The shortest Old Testament book: a prophecy of judgment against Edom for its pride and violence toward Judah.',
+    author: 'Obadiah',
+    written: 'c. 586 BC',
+    place: 'Judah',
+    audience: 'Judah',
+    genre: 'Minor Prophet',
+    themes: 'Pride, judgment on Edom',
   },
   {
     id: 'jonah',
@@ -265,6 +455,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 4,
     intro:
       'A reluctant prophet flees his mission but learns of God’s mercy toward even the great enemy city of Nineveh.',
+    author: 'Jonah (traditional)',
+    written: 'c. 780–750 BC',
+    place: 'Israel / Nineveh',
+    audience: 'Israel',
+    genre: 'Minor Prophet',
+    themes: 'Mercy, mission, God’s compassion',
   },
   {
     id: 'micah',
@@ -273,6 +469,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 7,
     intro:
       'Judgment and hope for Israel and Judah, with a call to do justice, love mercy, and walk humbly with God.',
+    author: 'Micah',
+    written: 'c. 735–700 BC',
+    place: 'Judah',
+    audience: 'Israel and Judah',
+    genre: 'Minor Prophet',
+    themes: 'Justice, judgment, hope',
   },
   {
     id: 'nahum',
@@ -281,6 +483,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 3,
     intro:
       'A prophecy of the fall of Nineveh, declaring that God is both a refuge and an avenger against cruelty.',
+    author: 'Nahum',
+    written: 'c. 663–612 BC',
+    place: 'Judah',
+    audience: 'Judah',
+    genre: 'Minor Prophet',
+    themes: 'Judgment on Nineveh, God’s justice',
   },
   {
     id: 'habakkuk',
@@ -289,6 +497,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 3,
     intro:
       'The prophet questions God about injustice and learns that "the righteous shall live by his faith."',
+    author: 'Habakkuk',
+    written: 'c. 609–598 BC',
+    place: 'Judah',
+    audience: 'Judah',
+    genre: 'Minor Prophet',
+    themes: 'Faith, doubt, God’s justice',
   },
   {
     id: 'zephaniah',
@@ -297,6 +511,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 3,
     intro:
       'A warning of the coming day of the Lord that ends with a promise of joyful restoration for a humble remnant.',
+    author: 'Zephaniah',
+    written: 'c. 640–621 BC',
+    place: 'Judah',
+    audience: 'Judah',
+    genre: 'Minor Prophet',
+    themes: 'Day of the Lord, judgment, restoration',
   },
   {
     id: 'haggai',
@@ -305,6 +525,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 2,
     intro:
       'A call to the returned exiles to rebuild the temple and put God first, with promises of future glory.',
+    author: 'Haggai',
+    written: 'c. 520 BC',
+    place: 'Jerusalem',
+    audience: 'Returned exiles',
+    genre: 'Minor Prophet',
+    themes: 'Temple rebuilding, priorities',
   },
   {
     id: 'zechariah',
@@ -313,6 +539,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 14,
     intro:
       'Symbolic visions encouraging the temple’s rebuilding and pointing forward to the coming Messianic King.',
+    author: 'Zechariah',
+    written: 'c. 520–480 BC',
+    place: 'Jerusalem',
+    audience: 'Returned exiles',
+    genre: 'Minor Prophet',
+    themes: 'Restoration, the coming Messiah',
   },
   {
     id: 'malachi',
@@ -321,6 +553,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 4,
     intro:
       'The last Old Testament prophet confronts half-hearted worship and promises the coming messenger before the day of the Lord.',
+    author: 'Malachi',
+    written: 'c. 460–430 BC',
+    place: 'Jerusalem',
+    audience: 'Returned exiles',
+    genre: 'Minor Prophet',
+    themes: 'Covenant faithfulness, worship',
   },
   // ----- New Testament -----
   {
@@ -330,6 +568,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 28,
     intro:
       'Presents Jesus as the promised Messiah and King, rich with His teaching, including the Sermon on the Mount.',
+    author: 'Matthew (traditional)',
+    written: 'c. AD 60–70',
+    place: 'Antioch or Judea',
+    audience: 'Jewish Christians',
+    genre: 'Gospel',
+    themes: 'Messiah, kingdom, fulfillment',
   },
   {
     id: 'mark',
@@ -338,6 +582,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 16,
     intro:
       'A fast-paced account of Jesus as the suffering Servant, emphasizing His mighty deeds and the way of the cross.',
+    author: 'Mark (traditional)',
+    written: 'c. AD 55–65',
+    place: 'Rome',
+    audience: 'Roman / Gentile Christians',
+    genre: 'Gospel',
+    themes: 'Servanthood, suffering, discipleship',
   },
   {
     id: 'luke',
@@ -346,6 +596,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 24,
     intro:
       'A carefully researched Gospel highlighting Jesus’ compassion for the poor, outsiders, and the lost.',
+    author: 'Luke',
+    written: 'c. AD 60–62',
+    place: 'Rome or Caesarea',
+    audience: 'Theophilus, Gentile believers',
+    genre: 'Gospel',
+    themes: 'Compassion, salvation, the Spirit',
   },
   {
     id: 'john',
@@ -354,6 +610,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 21,
     intro:
       'A theological Gospel presenting Jesus as the eternal Word and Son of God, written that readers may believe and have life.',
+    author: 'John (traditional)',
+    written: 'c. AD 85–95',
+    place: 'Ephesus',
+    audience: 'The early church, seekers',
+    genre: 'Gospel',
+    themes: 'Belief, eternal life, deity of Christ',
   },
   {
     id: 'acts',
@@ -362,6 +624,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 28,
     intro:
       'The birth and spread of the early church empowered by the Holy Spirit, from Jerusalem to Rome.',
+    author: 'Luke',
+    written: 'c. AD 62–70',
+    place: 'Rome',
+    audience: 'Theophilus, Gentile believers',
+    genre: 'History',
+    themes: 'Holy Spirit, mission, church growth',
   },
   {
     id: 'romans',
@@ -370,6 +638,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 16,
     intro:
       'Paul’s systematic exposition of the gospel: humanity’s sin, justification by faith, and life in the Spirit.',
+    author: 'Paul',
+    written: 'c. AD 57',
+    place: 'Corinth',
+    audience: 'The church in Rome',
+    genre: 'Pauline Epistle',
+    themes: 'Sin, justification, grace, faith',
   },
   {
     id: '1 corinthians',
@@ -378,6 +652,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 16,
     intro:
       'Paul addresses divisions and moral problems in a young church, teaching about unity, love, and the resurrection.',
+    author: 'Paul',
+    written: 'c. AD 53–55',
+    place: 'Ephesus',
+    audience: 'The church in Corinth',
+    genre: 'Pauline Epistle',
+    themes: 'Unity, love, resurrection, order',
   },
   {
     id: '2 corinthians',
@@ -386,6 +666,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 13,
     intro:
       'A deeply personal letter in which Paul defends his ministry and glories in God’s power made perfect in weakness.',
+    author: 'Paul',
+    written: 'c. AD 55–56',
+    place: 'Macedonia',
+    audience: 'The church in Corinth',
+    genre: 'Pauline Epistle',
+    themes: 'Ministry, weakness, reconciliation',
   },
   {
     id: 'galatians',
@@ -394,6 +680,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 6,
     intro:
       'A passionate defense of justification by faith apart from the law, and a call to freedom in the Spirit.',
+    author: 'Paul',
+    written: 'c. AD 48–55',
+    place: 'Antioch or Ephesus',
+    audience: 'The churches in Galatia',
+    genre: 'Pauline Epistle',
+    themes: 'Justification by faith, freedom',
   },
   {
     id: 'ephesians',
@@ -402,6 +694,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 6,
     intro:
       'God’s grand plan to unite all things in Christ, and how the church is to live out that new identity.',
+    author: 'Paul',
+    written: 'c. AD 60–62',
+    place: 'Rome (in prison)',
+    audience: 'The church in Ephesus',
+    genre: 'Pauline Epistle',
+    themes: 'Unity in Christ, the church, grace',
   },
   {
     id: 'philippians',
@@ -410,6 +708,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 4,
     intro:
       'A joyful letter from prison encouraging believers to rejoice, stand firm, and imitate the humility of Christ.',
+    author: 'Paul',
+    written: 'c. AD 60–62',
+    place: 'Rome (in prison)',
+    audience: 'The church in Philippi',
+    genre: 'Pauline Epistle',
+    themes: 'Joy, humility, contentment',
   },
   {
     id: 'colossians',
@@ -418,6 +722,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 4,
     intro:
       'Exalts the supremacy and sufficiency of Christ over all things and warns against hollow philosophy.',
+    author: 'Paul',
+    written: 'c. AD 60–62',
+    place: 'Rome (in prison)',
+    audience: 'The church in Colossae',
+    genre: 'Pauline Epistle',
+    themes: 'Christ’s supremacy, sufficiency',
   },
   {
     id: '1 thessalonians',
@@ -426,6 +736,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 5,
     intro:
       'Encouragement to a persecuted church to live holy lives while awaiting the return of the Lord Jesus.',
+    author: 'Paul',
+    written: 'c. AD 50–51',
+    place: 'Corinth',
+    audience: 'The church in Thessalonica',
+    genre: 'Pauline Epistle',
+    themes: 'Hope, holiness, Christ’s return',
   },
   {
     id: '2 thessalonians',
@@ -434,6 +750,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 3,
     intro:
       'Clarifies teaching about the day of the Lord and urges steadfast work and endurance amid persecution.',
+    author: 'Paul',
+    written: 'c. AD 51–52',
+    place: 'Corinth',
+    audience: 'The church in Thessalonica',
+    genre: 'Pauline Epistle',
+    themes: 'Day of the Lord, endurance',
   },
   {
     id: '1 timothy',
@@ -442,6 +764,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 6,
     intro:
       'Pastoral guidance to Timothy on sound doctrine, church order, and godly leadership.',
+    author: 'Paul',
+    written: 'c. AD 62–64',
+    place: 'Macedonia',
+    audience: 'Timothy',
+    genre: 'Pauline Epistle',
+    themes: 'Sound doctrine, church leadership',
   },
   {
     id: '2 timothy',
@@ -450,6 +778,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 4,
     intro:
       'Paul’s final letter, urging Timothy to guard the gospel and endure hardship as a faithful servant.',
+    author: 'Paul',
+    written: 'c. AD 66–67',
+    place: 'Rome (in prison)',
+    audience: 'Timothy',
+    genre: 'Pauline Epistle',
+    themes: 'Perseverance, faithfulness, the gospel',
   },
   {
     id: 'titus',
@@ -458,6 +792,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 3,
     intro:
       'Instructions for ordering church life on Crete and for sound teaching that produces godly living.',
+    author: 'Paul',
+    written: 'c. AD 62–64',
+    place: 'Macedonia',
+    audience: 'Titus',
+    genre: 'Pauline Epistle',
+    themes: 'Church order, godly living',
   },
   {
     id: 'philemon',
@@ -466,6 +806,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 1,
     intro:
       'A short personal appeal from Paul to welcome back a runaway slave, Onesimus, as a beloved brother.',
+    author: 'Paul',
+    written: 'c. AD 60–62',
+    place: 'Rome (in prison)',
+    audience: 'Philemon',
+    genre: 'Pauline Epistle',
+    themes: 'Forgiveness, reconciliation, brotherhood',
   },
   {
     id: 'hebrews',
@@ -474,6 +820,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 13,
     intro:
       'Shows the supremacy of Christ over the old covenant and urges perseverance in faith.',
+    author: 'Unknown',
+    written: 'c. AD 60–70',
+    place: 'Uncertain',
+    audience: 'Jewish Christians',
+    genre: 'General Epistle',
+    themes: 'Christ’s supremacy, perseverance, faith',
   },
   {
     id: 'james',
@@ -482,6 +834,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 5,
     intro:
       'Practical wisdom on living out genuine faith through works, taming the tongue, and enduring trials.',
+    author: 'James (traditional, brother of Jesus)',
+    written: 'c. AD 44–49',
+    place: 'Jerusalem',
+    audience: 'Jewish Christians of the dispersion',
+    genre: 'General Epistle',
+    themes: 'Faith and works, trials, wisdom',
   },
   {
     id: '1 peter',
@@ -490,6 +848,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 5,
     intro:
       'Encouragement to suffering believers to hold fast to their living hope and follow Christ’s example.',
+    author: 'Peter',
+    written: 'c. AD 62–64',
+    place: 'Rome',
+    audience: 'Scattered believers in Asia Minor',
+    genre: 'General Epistle',
+    themes: 'Suffering, hope, holy living',
   },
   {
     id: '2 peter',
@@ -498,6 +862,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 3,
     intro:
       'Warns against false teachers and scoffers, urging growth in grace while awaiting the day of the Lord.',
+    author: 'Peter (traditional)',
+    written: 'c. AD 64–68',
+    place: 'Rome',
+    audience: 'Scattered believers in Asia Minor',
+    genre: 'General Epistle',
+    themes: 'False teachers, growth, Christ’s return',
   },
   {
     id: '1 john',
@@ -506,6 +876,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 5,
     intro:
       'Assurance of eternal life for those who walk in the light, love one another, and believe in the Son of God.',
+    author: 'John (traditional)',
+    written: 'c. AD 85–95',
+    place: 'Ephesus',
+    audience: 'The church',
+    genre: 'General Epistle',
+    themes: 'Love, truth, assurance',
   },
   {
     id: '2 john',
@@ -514,6 +890,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 1,
     intro:
       'A brief letter urging believers to walk in truth and love while guarding against deceivers.',
+    author: 'John (traditional)',
+    written: 'c. AD 85–95',
+    place: 'Ephesus',
+    audience: 'An elect lady and her church',
+    genre: 'General Epistle',
+    themes: 'Truth, love, discernment',
   },
   {
     id: '3 john',
@@ -522,6 +904,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 1,
     intro:
       'A personal note commending hospitality toward traveling ministers and warning against a domineering leader.',
+    author: 'John (traditional)',
+    written: 'c. AD 85–95',
+    place: 'Ephesus',
+    audience: 'Gaius',
+    genre: 'General Epistle',
+    themes: 'Hospitality, truth, leadership',
   },
   {
     id: 'jude',
@@ -530,6 +918,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 1,
     intro:
       'A vigorous call to contend for the faith against ungodly false teachers who had crept into the church.',
+    author: 'Jude (traditional, brother of Jesus)',
+    written: 'c. AD 65–80',
+    place: 'Uncertain',
+    audience: 'The church',
+    genre: 'General Epistle',
+    themes: 'Contending for the faith, false teachers',
   },
   {
     id: 'revelation',
@@ -538,6 +932,12 @@ export const BOOKS: BookMeta[] = [
     chapterCount: 22,
     intro:
       'An apocalyptic vision of Christ’s victory, final judgment, and the new heaven and new earth.',
+    author: 'John (traditional)',
+    written: 'c. AD 95',
+    place: 'Patmos',
+    audience: 'The seven churches of Asia',
+    genre: 'Apocalyptic',
+    themes: 'Christ’s victory, judgment, new creation',
   },
 ]
 
