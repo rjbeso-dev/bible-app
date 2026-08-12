@@ -105,3 +105,19 @@ export interface DailyVerse {
 
 /** Loading/fetch status for a chapter request. */
 export type ChapterStatus = 'idle' | 'loading' | 'ready' | 'error' | 'offline'
+
+/** Generated ambient soundscape identifiers. */
+export type AudioScene = 'rain' | 'pad' | 'brown' | 'chimes'
+
+/** Whether the background player is using a generated scene or the user's own audio. */
+export type AudioMode = 'ambient' | 'custom'
+
+/** Persisted background-audio player settings (never includes isPlaying). */
+export interface AudioSettings {
+  mode: AudioMode
+  scene: AudioScene
+  /** 0..1 */
+  volume: number
+  customUrl?: string
+  customName?: string
+}

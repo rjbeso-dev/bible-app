@@ -15,6 +15,7 @@ export const STORAGE_KEYS = {
   cacheIndex: `${STORAGE_PREFIX}cache.index`,
   readChapters: `${STORAGE_PREFIX}readChapters`,
   recentChapters: `${STORAGE_PREFIX}recentChapters`,
+  audio: `${STORAGE_PREFIX}audio`,
 } as const
 
 export const STORAGE_VERSION = 1

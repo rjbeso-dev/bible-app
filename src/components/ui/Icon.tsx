@@ -24,6 +24,10 @@ export type IconName =
   | 'close'
   | 'key'
   | 'sparkle'
+  | 'music'
+  | 'play'
+  | 'pause'
+  | 'speaker'
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName
@@ -106,6 +110,21 @@ const PATHS: Record<IconName, ReactElement> = {
     </>
   ),
   sparkle: <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />,
+  music: (
+    <>
+      <circle cx="6" cy="18" r="2.5" />
+      <circle cx="17" cy="16" r="2.5" />
+      <path d="M8.5 18V6l11-2v12" />
+    </>
+  ),
+  play: <path d="M7 5l12 7-12 7z" />,
+  pause: <path d="M9 5v14M15 5v14" />,
+  speaker: (
+    <>
+      <path d="M4 9v6h4l5 4V5L8 9z" />
+      <path d="M17 9.5a3.5 3.5 0 0 1 0 5M19.5 7a7 7 0 0 1 0 10" />
+    </>
+  ),
 }
 
 export function Icon({ name, size = 18, title, ...rest }: IconProps) {

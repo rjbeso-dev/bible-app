@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { readLastRead } from '../../hooks/useLastRead'
 import { ThemeToggle } from './ThemeToggle'
 import { FontControls } from './FontControls'
+import { MusicControls } from '../audio/MusicControls'
 import { Icon } from '../ui/Icon'
 
 export function Header() {
@@ -48,6 +49,7 @@ export function Header() {
         </nav>
 
         <div className="app-header-actions">
+          <MusicControls />
           <FontControls />
           <ThemeToggle />
         </div>
