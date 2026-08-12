@@ -1,0 +1,556 @@
+/* ===========================================================================
+   Design tokens & theming
+   =========================================================================== */
+
+:root {
+  /* Reader font size, overridden at runtime by SettingsProvider. */
+  --reader-font-scale: 1.1875rem;
+
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia',
+    'Cambria', 'Times New Roman', serif;
+  /* A distinct display stack for headings & the wordmark. */
+  --font-display: 'Iowan Old Style', 'Palatino', 'Georgia', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'JetBrains Mono', 'Menlo', 'Consolas',
+    'Liberation Mono', monospace;
+  /* An honestly legible comfort stack (not Comic Sans). */
+  --font-comfort: 'Atkinson Hyperlegible', 'Verdana', 'Tahoma', system-ui,
+    sans-serif;
+
+  /* Modular type scale (ratio ~1.25). */
+  --step--2: 0.64rem;
+  --step--1: 0.8rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.5625rem;
+  --step-3: 1.953rem;
+  --step-4: 2.441rem;
+
+  /* Squared-off, editorial corners; shadows reserved for popovers/modals. */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.12);
+  --shadow-lg: 0 18px 48px rgba(15, 23, 42, 0.22);
+
+  --maxw-reader: 44rem;
+  --maxw-app: 72rem;
+}
+
+/* Light theme (default) */
+:root,
+:root[data-theme='light'] {
+  --bg: #f7f5f0;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #efece4;
+  --surface: #ffffff;
+  --surface-hover: #f2efe8;
+  --border: #e3ddd0;
+  --border-strong: #d3cbb8;
+  --text: #23201a;
+  --text-muted: #6b6455;
+  --text-faint: #948b78;
+  --accent: #8a5a2b;
+  --accent-hover: #74491f;
+  --accent-contrast: #ffffff;
+  --danger: #b3261e;
+  --focus-ring: #8a5a2b;
+
+  --hl-yellow: #fde88a;
+  --hl-green: #bfe6b6;
+  --hl-blue: #b6d9f2;
+  --hl-pink: #f6c2d6;
+  --hl-orange: #f8cf9a;
+}
+
+/* Dark theme */
+:root[data-theme='dark'] {
+  --bg: #17150f;
+  --bg-elevated: #211e17;
+  --bg-sunken: #100e0a;
+  --surface: #211e17;
+  --surface-hover: #2b271e;
+  --border: #35301f;
+  --border-strong: #4a4330;
+  --text: #ece6d8;
+  --text-muted: #a9a08b;
+  --text-faint: #7d7562;
+  --accent: #d8a15f;
+  --accent-hover: #e6b374;
+  --accent-contrast: #1a1710;
+  --danger: #f28b82;
+  --focus-ring: #d8a15f;
+
+  --hl-yellow: #6e5f1f;
+  --hl-green: #3c5a34;
+  --hl-blue: #2f4a63;
+  --hl-pink: #63324a;
+  --hl-orange: #6b4a24;
+}
+
+/* ===========================================================================
+   Base
+   =========================================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Reader typeface driven by data-font on <html>. */
+:root[data-font='serif'] .reader-body { font-family: var(--font-serif); }
+:root[data-font='sans'] .reader-body { font-family: var(--font-sans); }
+:root[data-font='mono'] .reader-body { font-family: var(--font-mono); }
+:root[data-font='comfort'] .reader-body { font-family: var(--font-comfort); }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+/* ===========================================================================
+   App shell
+   =========================================================================== */
+
+.app-shell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--maxw-app);
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+
+.app-footer {
+  border-top: 1px solid var(--border);
+  padding: 1.25rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* ===========================================================================
+   Header
+   =========================================================================== */
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  /* Subtle solid + hairline, no heavy blur. */
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header-inner {
+  max-width: var(--maxw-app);
+  margin: 0 auto;
+  padding: 0.65rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  font-size: 1.2rem;
+}
+.brand:hover {
+  text-decoration: none;
+}
+.brand-mark {
+  display: inline-flex;
+  color: var(--accent);
+}
+
+/* Consistent inline-SVG icon sizing/alignment. */
+.icon {
+  display: inline-block;
+  vertical-align: -0.15em;
+  flex: none;
+}
+
+/* A thin accent "ribbon" motif reused across surfaces for identity. */
+.ribbon-accent {
+  height: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0.85;
+}
+
+.app-nav {
+  display: flex;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+.nav-link {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.nav-link:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-link.is-active {
+  background: var(--bg-sunken);
+  color: var(--text);
+}
+
+.app-header-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ===========================================================================
+   Buttons & controls
+   =========================================================================== */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.button:hover {
+  background: var(--surface-hover);
+}
+.button.small {
+  padding: 0.32rem 0.6rem;
+  font-size: 0.85rem;
+}
+.button.primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
+.button.primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.button.ghost {
+  background: transparent;
+  border-color: var(--border);
+}
+.button.ghost:hover {
+  background: var(--surface-hover);
+}
+.button.ghost.is-active {
+  background: var(--bg-sunken);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.button.danger {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.1rem;
+  height: 2.1rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius-md);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.icon-button:hover {
+  background: var(--surface-hover);
+}
+.icon-button.is-active {
+  background: var(--bg-sunken);
+  border-color: var(--border-strong);
+}
+.icon-button.danger {
+  border-color: transparent;
+  background: transparent;
+  color: var(--danger);
+}
+.icon-button.danger:hover {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+}
+.icon-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Popover primitives */
+.popover-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+/* Font controls */
+.font-controls {
+  position: relative;
+}
+.font-controls-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 50;
+  width: 16rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.font-controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.font-controls-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  font-weight: 700;
+}
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  background: var(--bg-sunken);
+  padding: 0.25rem;
+  border-radius: var(--radius-md);
+}
+.segmented-item {
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.25rem;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.segmented-item.is-active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.stepper-value {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ===========================================================================
+   Modals
+   =========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(10, 8, 4, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal {
+  width: 100%;
+  max-width: 34rem;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.modal-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.modal-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.modal-footer-spacer {
+  flex: 1;
+}
+
+/* ===========================================================================
+   Banners & states
+   =========================================================================== */
+
+.offline-banner {
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 0.45rem 1rem;
+}
+.banner-inline {
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.9rem;
+  margin: 0.75rem 0;
+}
+.banner-inline.warning {
+  background: color-mix(in srgb, var(--hl-orange) 45%, var(--bg-elevated));
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  max-width: 32rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.empty-state-lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  color: var(--text);
+}
+.empty-state .button {
+  margin-top: 0.75rem;
+}
+
+/* Skeleton loading */
+.chapter-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+.skeleton-line {
+  height: 1rem;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-sunken) 25%,
+    var(--surface-hover) 37%,
+    var(--bg-sunken) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line { animation: none; }
+  * { scroll-behavior: auto !important; }
+}
+
+.page-title {
+  margin: 0 0 1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-3);
+  letter-spacing: 0.01em;
+}
+
+/* ===========================================================================
+   Chapter attribution
+   =========================================================================== */
+
+.chapter-attribution {
+  margin: 1.75rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}

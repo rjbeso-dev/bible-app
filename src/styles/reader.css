@@ -1,0 +1,652 @@
+/* ===========================================================================
+   Reader layout
+   =========================================================================== */
+
+.reader {
+  max-width: var(--maxw-reader);
+  margin: 0 auto;
+}
+
+.reader-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.reader-toolbar-left,
+.reader-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reader-body {
+  margin-top: 0.5rem;
+}
+
+.chapter-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-3);
+  /* Chapter reference set in small caps with open letter-spacing. */
+  font-variant-caps: small-caps;
+  letter-spacing: 0.06em;
+  margin: 0 0 1.25rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.chapter-heading-translation {
+  font-family: var(--font-sans);
+  font-variant-caps: normal;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.reader-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reader-error {
+  text-align: center;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reader-pager {
+  margin-top: 2rem;
+}
+
+/* ===========================================================================
+   Translation select
+   =========================================================================== */
+
+.translation-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.translation-select-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  font-weight: 700;
+}
+.translation-select.is-compact .translation-select-label {
+  display: none;
+}
+.translation-select-input {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+
+/* ===========================================================================
+   Book / chapter picker
+   =========================================================================== */
+
+.book-picker {
+  position: relative;
+}
+.book-picker-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.45rem 0.75rem;
+  font: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+  cursor: pointer;
+}
+.book-picker-trigger:hover {
+  background: var(--surface-hover);
+}
+.book-picker-caret {
+  color: var(--text-faint);
+  font-size: 0.8rem;
+}
+
+.book-picker-panel {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 50;
+  width: min(38rem, 92vw);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.book-picker-columns {
+  display: grid;
+  grid-template-columns: 12rem 1fr;
+  /* Cap the panel and let each column scroll on its own. Without an explicit
+     height the grid tracks would grow to fit all 66 books and get clipped. */
+  height: min(70vh, 34rem);
+}
+.book-list {
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  /* Grid items default to min-height:auto, which blocks internal scrolling and
+     causes the list to clip (previously cut off around Esther). */
+  min-height: 0;
+  padding: 0.5rem;
+  background: var(--bg-sunken);
+}
+.book-group + .book-group {
+  margin-top: 0.75rem;
+}
+.book-group-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  font-weight: 700;
+  padding: 0.35rem 0.5rem;
+}
+.book-group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.book-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.book-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.book-item.is-active {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+.book-item.is-current {
+  color: var(--accent);
+}
+
+.chapter-grid-wrap {
+  padding: 0.85rem;
+  overflow-y: auto;
+  min-height: 0;
+}
+.chapter-grid-title {
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.5rem, 1fr));
+  gap: 0.4rem;
+}
+.chapter-cell {
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chapter-cell:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+.chapter-cell.is-current {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
+
+/* ===========================================================================
+   Chapter pager
+   =========================================================================== */
+
+.chapter-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.pager-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.55rem 0.85rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  max-width: 48%;
+}
+.pager-button:hover {
+  background: var(--surface-hover);
+}
+.pager-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.pager-button-next {
+  margin-left: auto;
+}
+.pager-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===========================================================================
+   Book intro
+   =========================================================================== */
+
+.book-intro {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.15rem;
+  margin-bottom: 1.5rem;
+}
+.book-intro-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.book-intro-eyebrow {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  font-weight: 700;
+}
+.book-intro-title {
+  margin: 0.3rem 0 0.4rem;
+  font-size: 1.25rem;
+}
+.book-intro-body {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ===========================================================================
+   Verses
+   =========================================================================== */
+
+.chapter-view {
+  font-size: var(--reader-font-scale);
+  line-height: 1.75;
+}
+
+.verse-row {
+  border-radius: var(--radius-sm);
+  transition: background 0.12s ease;
+}
+.verse-row.is-selected {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.verse-body {
+  display: inline;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  padding: 0.05em 0.15em;
+  margin: 0;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.verse-body:hover {
+  background: var(--surface-hover);
+}
+.verse-num {
+  font-size: 0.62em;
+  font-weight: 600;
+  color: var(--text-faint);
+  margin-right: 0.3em;
+  vertical-align: super;
+  line-height: 0;
+  font-family: var(--font-sans);
+  font-variant-numeric: lining-nums;
+}
+.verse-text {
+  white-space: pre-wrap;
+}
+
+/* Illuminated drop cap on the first verse of a chapter. */
+.dropcap {
+  float: left;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 3.1em;
+  line-height: 0.72;
+  padding: 0.06em 0.08em 0 0;
+  margin-right: 0.02em;
+}
+.note-dot {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-left: 0.3em;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+}
+
+/* Highlight backgrounds applied to whole verse rows. */
+.verse-row[data-highlight] .verse-body,
+.parallel-row[data-highlight] .parallel-grid .verse-body:first-child {
+  border-radius: var(--radius-sm);
+  padding: 0.05em 0.2em;
+}
+.verse-row[data-highlight='yellow'] .verse-body { background: var(--hl-yellow); }
+.verse-row[data-highlight='green'] .verse-body { background: var(--hl-green); }
+.verse-row[data-highlight='blue'] .verse-body { background: var(--hl-blue); }
+.verse-row[data-highlight='pink'] .verse-body { background: var(--hl-pink); }
+.verse-row[data-highlight='orange'] .verse-body { background: var(--hl-orange); }
+
+/* Verse action toolbar */
+.verse-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.6rem 0.7rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.verse-actions-buttons {
+  display: flex;
+  gap: 0.4rem;
+  margin-left: auto;
+}
+
+/* Highlight menu swatches */
+.highlight-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.swatch {
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+.swatch.is-active {
+  border-color: var(--text);
+  box-shadow: 0 0 0 2px var(--bg-elevated), 0 0 0 4px var(--accent);
+}
+.swatch-yellow { background: var(--hl-yellow); }
+.swatch-green { background: var(--hl-green); }
+.swatch-blue { background: var(--hl-blue); }
+.swatch-pink { background: var(--hl-pink); }
+.swatch-orange { background: var(--hl-orange); }
+.swatch-clear {
+  background: var(--surface);
+}
+.swatch-clear:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===========================================================================
+   Parallel view
+   =========================================================================== */
+
+.parallel-view {
+  font-size: calc(var(--reader-font-scale) * 0.94);
+  line-height: 1.65;
+}
+.parallel-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.parallel-note {
+  margin: 0.5rem 0;
+}
+.parallel-rows {
+  display: flex;
+  flex-direction: column;
+}
+.parallel-row {
+  border-radius: var(--radius-sm);
+  padding: 0.15rem 0;
+}
+.parallel-row.is-selected {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+.parallel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+.parallel-grid .verse-body {
+  display: block;
+  width: 100%;
+}
+.parallel-grid .verse-body.secondary {
+  cursor: default;
+  color: var(--text-muted);
+}
+.parallel-grid .verse-body.secondary:hover {
+  background: transparent;
+}
+.parallel-row[data-highlight='yellow'] { background: color-mix(in srgb, var(--hl-yellow) 55%, transparent); }
+.parallel-row[data-highlight='green'] { background: color-mix(in srgb, var(--hl-green) 55%, transparent); }
+.parallel-row[data-highlight='blue'] { background: color-mix(in srgb, var(--hl-blue) 55%, transparent); }
+.parallel-row[data-highlight='pink'] { background: color-mix(in srgb, var(--hl-pink) 55%, transparent); }
+.parallel-row[data-highlight='orange'] { background: color-mix(in srgb, var(--hl-orange) 55%, transparent); }
+
+@media (max-width: 640px) {
+  .parallel-header,
+  .parallel-grid {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+  .parallel-grid .verse-body.secondary {
+    padding-left: 0.9rem;
+    border-left: 2px solid var(--border);
+  }
+}
+
+/* ===========================================================================
+   Verse context panel
+   =========================================================================== */
+
+.context-modal {
+  max-width: 38rem;
+}
+.context-body {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.context-row {
+  margin: 0;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+}
+.context-row.is-focus {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--text);
+  font-weight: 500;
+}
+.context-verse-num {
+  font-size: 0.72em;
+  font-weight: 700;
+  color: var(--accent);
+  margin-right: 0.4em;
+  vertical-align: super;
+}
+
+/* ===========================================================================
+   Notes
+   =========================================================================== */
+
+.note-modal {
+  max-width: 32rem;
+}
+.note-list {
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.note-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.25rem 0.35rem 0.25rem 0.6rem;
+}
+.note-list-item.is-editing {
+  border-color: var(--accent);
+}
+.note-list-body {
+  flex: 1;
+  text-align: left;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.35rem 0;
+  white-space: pre-wrap;
+}
+.note-textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 0.8rem;
+  resize: vertical;
+  min-height: 5rem;
+}
+
+.notes-page {
+  max-width: var(--maxw-reader);
+  margin: 0 auto;
+}
+.notes-page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.notes-group {
+  margin-bottom: 1.75rem;
+}
+.notes-group-title {
+  font-size: 1.15rem;
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+.notes-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.note-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.8rem 0.9rem;
+}
+.note-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+.note-card-ref {
+  font-weight: 700;
+  color: var(--accent);
+}
+.note-card-confirm {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+.note-card-body {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
