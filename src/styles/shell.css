@@ -1,0 +1,405 @@
+/* ===========================================================================
+   Left navigation rail (collapsible; becomes a bottom bar on narrow screens)
+   =========================================================================== */
+
+.rail {
+  --rail-w-collapsed: 60px;
+  --rail-w-expanded: 186px;
+
+  flex: none;
+  width: var(--rail-w-collapsed);
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: width 0.15s ease;
+}
+.rail.is-expanded {
+  width: var(--rail-w-expanded);
+}
+
+.rail-top {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.85rem 0.6rem 0.6rem;
+}
+
+.rail-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  flex: 1;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+}
+.rail-brand:hover {
+  text-decoration: none;
+}
+.rail-brand-mark {
+  display: inline-flex;
+  flex: none;
+  color: var(--accent);
+}
+.rail-brand-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rail-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.rail-toggle:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.rail-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.4rem;
+}
+
+/* Shared "rail item" look: an icon + label row used by nav links, the
+   Sound/Display/Theme triggers, and the mobile bottom bar. */
+.rail-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+.rail-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  text-decoration: none;
+}
+.rail-item.is-active {
+  background: var(--bg-sunken);
+  color: var(--text);
+}
+/* Inset accent bar on the active item. */
+.rail-item.is-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+.rail-item-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Collapsed rail: hide labels, center icons. */
+.rail.is-collapsed .rail-item-label,
+.rail.is-collapsed .rail-brand-text {
+  display: none;
+}
+.rail.is-collapsed .rail-item {
+  justify-content: center;
+  gap: 0;
+}
+
+.rail-spacer {
+  flex: 1;
+}
+.rail-divider {
+  height: 1px;
+  margin: 0.4rem 0.7rem;
+  background: var(--border);
+}
+
+.rail-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.4rem;
+  padding-bottom: 0.7rem;
+}
+
+/* Sound/Display controls, positioned as rail items whose popovers open to
+   the right of the rail rather than below a header icon. */
+.rail-item-wrap {
+  position: relative;
+}
+.font-controls-panel.panel-right,
+.music-panel.panel-right {
+  left: calc(100% + 0.6rem);
+  right: auto;
+  top: 0;
+  bottom: auto;
+}
+
+/* ===========================================================================
+   Responsive: rail becomes a fixed bottom bar
+   =========================================================================== */
+
+@media (max-width: 640px) {
+  .rail {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .rail-top,
+  .rail-spacer,
+  .rail-divider {
+    display: none;
+  }
+  .rail-nav,
+  .rail-bottom {
+    flex: 1;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0.3rem;
+  }
+  .rail-item,
+  .rail.is-collapsed .rail-item {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
+    width: auto;
+    padding: 0.35rem 0.6rem;
+  }
+  .rail-item-label,
+  .rail.is-collapsed .rail-item-label {
+    display: none;
+  }
+  .font-controls-panel.panel-right,
+  .music-panel.panel-right {
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 0.6rem);
+    transform: translateX(-50%);
+  }
+
+  .app-main {
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* ===========================================================================
+   Reader — focus column + study panel + floating dock
+   =========================================================================== */
+
+.reader-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.reader-column {
+  flex: 1;
+  min-width: 0;
+}
+.reader-focus .reader-body {
+  max-width: var(--maxw-reader);
+  margin: 0 auto;
+  padding: 0 0 4rem;
+}
+
+.reader-dock {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  z-index: 35;
+  max-width: calc(100vw - 2rem);
+}
+.reader-dock .chapter-pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+  padding: 0.35rem 0.4rem;
+}
+.reader-dock .pager-button {
+  border-radius: 999px;
+  border-color: transparent;
+  background: transparent;
+  max-width: 11rem;
+}
+.reader-dock .pager-button:hover {
+  background: var(--surface-hover);
+}
+.reader-dock .pager-button-next {
+  margin-left: 0;
+}
+.reader-dock .pager-current {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  white-space: nowrap;
+  padding: 0 0.7rem;
+}
+
+@media (max-width: 640px) {
+  .reader-dock {
+    left: 50%;
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+  .reader-dock .pager-label {
+    display: none;
+  }
+}
+
+/* Study panel */
+.study-panel {
+  flex: 0 0 286px;
+  width: 286px;
+  position: sticky;
+  top: 1.25rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.study-panel-hint {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.study-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.study-panel-ref {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-1);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.04em;
+}
+.study-panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.study-panel-section + .study-panel-section {
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--border);
+}
+.study-panel-label {
+  margin: 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-faint);
+  font-weight: 700;
+}
+.study-panel-note-body {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+.study-panel-note-empty {
+  margin: 0;
+  font-size: 0.85rem;
+}
+.study-panel-parallel-text {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+.study-panel-parallel-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+.study-panel-context {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+.study-panel-context-row {
+  margin: 0;
+  padding: 0.3rem 0.4rem;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+}
+.study-panel-context-row.is-focus {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  color: var(--text);
+  font-weight: 500;
+}
+
+@media (max-width: 960px) {
+  .study-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 720px) {
+  .reader-layout {
+    flex-direction: column;
+  }
+  .study-panel {
+    width: 100%;
+    flex: none;
+  }
+}

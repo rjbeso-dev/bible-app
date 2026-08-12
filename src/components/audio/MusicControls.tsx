@@ -3,7 +3,13 @@ import { useAudio } from '../../context/useAudio'
 import { AMBIENT_SCENES } from '../../lib/audioEngine'
 import { Icon } from '../ui/Icon'
 
-export function MusicControls() {
+interface MusicControlsProps {
+  /** 'rail' renders the trigger as a full-width rail item and opens the panel to the right. */
+  variant?: 'header' | 'rail'
+}
+
+export function MusicControls({ variant = 'header' }: MusicControlsProps = {}) {
+  const isRail = variant === 'rail'
   const {
     isPlaying,
     mode,
@@ -41,10 +47,10 @@ export function MusicControls() {
   }
 
   return (
-    <div className="music-controls">
+    <div className={'music-controls' + (isRail ? ' rail-item-wrap' : '')}>
       <button
         type="button"
-        className={'icon-button' + (isPlaying ? ' is-active' : '')}
+        className={(isRail ? 'rail-item' : 'icon-button') + (isPlaying ? ' is-active' : '')}
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
@@ -60,12 +66,17 @@ export function MusicControls() {
         ) : (
           <Icon name="music" />
         )}
+        {isRail && <span className="rail-item-label">Sound</span>}
       </button>
 
       {open && (
         <>
           <div className="popover-backdrop" onClick={() => setOpen(false)} aria-hidden="true" />
-          <div className="music-panel" role="dialog" aria-label="Background sound">
+          <div
+            className={'music-panel' + (isRail ? ' panel-right' : '')}
+            role="dialog"
+            aria-label="Background sound"
+          >
             <div className="music-transport">
               <button
                 type="button"

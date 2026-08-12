@@ -28,6 +28,9 @@ export type IconName =
   | 'play'
   | 'pause'
   | 'speaker'
+  | 'menu'
+  | 'home'
+  | 'sidebar'
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName
@@ -123,6 +126,19 @@ const PATHS: Record<IconName, ReactElement> = {
     <>
       <path d="M4 9v6h4l5 4V5L8 9z" />
       <path d="M17 9.5a3.5 3.5 0 0 1 0 5M19.5 7a7 7 0 0 1 0 10" />
+    </>
+  ),
+  menu: <path d="M4 7h16M4 12h16M4 17h16" />,
+  home: (
+    <>
+      <path d="M4 11.5 12 4l8 7.5" />
+      <path d="M6 10v10h5v-6h2v6h5V10" />
+    </>
+  ),
+  sidebar: (
+    <>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
+      <path d="M15.5 4.5v15" />
     </>
   ),
 }

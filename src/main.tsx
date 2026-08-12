@@ -7,6 +7,7 @@ import { AudioProvider } from './context/AudioProvider'
 import './styles/globals.css'
 import './styles/reader.css'
 import './styles/dashboard.css'
+import './styles/shell.css'
 
 const rootEl = document.getElementById('root')
 if (!rootEl) throw new Error('Root element #root not found')

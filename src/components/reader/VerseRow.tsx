@@ -8,6 +8,9 @@ interface VerseRowProps {
   selected: boolean
   /** When true, render an illuminated drop cap on the first letter. */
   dropCap?: boolean
+  /** When false, selecting a verse doesn't show the inline action bar (the
+      study panel handles highlight/note/context instead). Defaults to true. */
+  inlineActions?: boolean
   onSelect: () => void
   onSetHighlight: (color: HighlightColor) => void
   onClearHighlight: () => void
@@ -28,6 +31,7 @@ export function VerseRow({
   hasNote,
   selected,
   dropCap,
+  inlineActions = true,
   onSelect,
   onSetHighlight,
   onClearHighlight,
@@ -62,7 +66,7 @@ export function VerseRow({
         {hasNote && <span className="note-dot" aria-label="has note" title="Has a note" />}
       </button>
 
-      {selected && (
+      {selected && inlineActions && (
         <div className="verse-actions" role="toolbar" aria-label={`Actions for verse ${verse.verse}`}>
           <HighlightMenu
             current={highlightColor}

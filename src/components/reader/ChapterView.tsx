@@ -9,6 +9,8 @@ interface ChapterViewProps {
   chapter: number
   verses: Verse[]
   selectedVerse: number | null
+  /** When false, suppress the inline verse action bar (the study panel owns it). */
+  inlineActions?: boolean
   onSelectVerse: (verse: number | null) => void
   onOpenNote: (verse: number) => void
   onOpenContext: (verse: number) => void
@@ -20,6 +22,7 @@ export function ChapterView({
   chapter,
   verses,
   selectedVerse,
+  inlineActions = true,
   onSelectVerse,
   onOpenNote,
   onOpenContext,
@@ -36,6 +39,7 @@ export function ChapterView({
             key={v.verse}
             verse={v}
             dropCap={i === 0}
+            inlineActions={inlineActions}
             highlightColor={colorFor(key)}
             hasNote={hasNote(key)}
             selected={selectedVerse === v.verse}

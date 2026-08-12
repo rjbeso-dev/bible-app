@@ -147,56 +147,19 @@ a:hover {
 .app-shell {
   min-height: 100%;
   display: flex;
-  flex-direction: column;
+  align-items: stretch;
 }
 
 .app-main {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   width: 100%;
   max-width: var(--maxw-app);
   margin: 0 auto;
   padding: 1.25rem 1rem 3rem;
 }
 
-/* ===========================================================================
-   Header
-   =========================================================================== */
-
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  /* Subtle solid + hairline, no heavy blur. */
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border);
-}
-
-.app-header-inner {
-  max-width: var(--maxw-app);
-  margin: 0 auto;
-  padding: 0.65rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--text);
-  font-size: 1.2rem;
-}
-.brand:hover {
-  text-decoration: none;
-}
-.brand-mark {
-  display: inline-flex;
-  color: var(--accent);
-}
+/* The rail, brand, nav and control layout live in shell.css. */
 
 /* Consistent inline-SVG icon sizing/alignment. */
 .icon {
@@ -211,35 +174,6 @@ a:hover {
   border-radius: 3px;
   background: var(--accent);
   opacity: 0.85;
-}
-
-.app-nav {
-  display: flex;
-  gap: 0.25rem;
-  margin-left: 0.5rem;
-}
-.nav-link {
-  padding: 0.4rem 0.75rem;
-  border-radius: var(--radius-md);
-  color: var(--text-muted);
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-.nav-link:hover {
-  background: var(--surface-hover);
-  color: var(--text);
-  text-decoration: none;
-}
-.nav-link.is-active {
-  background: var(--bg-sunken);
-  color: var(--text);
-}
-
-.app-header-actions {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 }
 
 /* ===========================================================================

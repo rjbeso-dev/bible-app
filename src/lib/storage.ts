@@ -16,6 +16,8 @@ export const STORAGE_KEYS = {
   readChapters: `${STORAGE_PREFIX}readChapters`,
   recentChapters: `${STORAGE_PREFIX}recentChapters`,
   audio: `${STORAGE_PREFIX}audio`,
+  railExpanded: `${STORAGE_PREFIX}railExpanded`,
+  studyOpen: `${STORAGE_PREFIX}studyOpen`,
 } as const
 
 export const STORAGE_VERSION = 1

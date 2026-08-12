@@ -11,6 +11,7 @@ import {
   formatReference,
   verseKey as makeKey,
 } from '../../lib/references'
+import { STORAGE_KEYS, readJSON, writeJSON } from '../../lib/storage'
 import { BookChapterPicker } from '../navigation/BookChapterPicker'
 import { ChapterPager } from '../navigation/ChapterPager'
 import { BookIntro } from '../study/BookIntro'
@@ -19,6 +20,7 @@ import { VerseContextPanel } from '../study/VerseContextPanel'
 import { Icon } from '../ui/Icon'
 import { ChapterView } from './ChapterView'
 import { ParallelView } from './ParallelView'
+import { StudyPanel } from './StudyPanel'
 import { TranslationSelect } from './TranslationSelect'
 import { ChapterAttribution } from './ChapterAttribution'
 
@@ -41,8 +43,13 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
   const [noteVerse, setNoteVerse] = useState<number | null>(null)
   const [contextVerse, setContextVerse] = useState<number | null>(null)
   const [introOpen, setIntroOpen] = useState(chapter === 1)
+  const [studyOpen, setStudyOpen] = useState(() => readJSON<boolean>(STORAGE_KEYS.studyOpen, true))
 
   const scrolledFor = useRef<string>('')
+
+  useEffect(() => {
+    writeJSON(STORAGE_KEYS.studyOpen, studyOpen)
+  }, [studyOpen])
 
   // Record last-read and reading progress on chapter change.
   useEffect(() => {
@@ -58,6 +65,11 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
   useEffect(() => {
     if (meta && selectedVerse) record(book, chapter, selectedVerse)
   }, [selectedVerse, book, chapter, meta, record])
+
+  // Selecting a verse opens (and populates) the study panel.
+  useEffect(() => {
+    if (selectedVerse != null) setStudyOpen(true)
+  }, [selectedVerse])
 
   // Scroll to the initial (hash) verse once the chapter is ready.
   useEffect(() => {
@@ -113,9 +125,10 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
 
   const verses = primary.chapter?.verses ?? []
   const noteKey = noteVerse != null ? makeKey(book, chapter, noteVerse) : null
+  const showStudyPanel = !settings.parallelEnabled && studyOpen
 
   return (
-    <div className="reader">
+    <div className="reader reader-focus">
       <div className="reader-toolbar">
         <div className="reader-toolbar-left">
           <BookChapterPicker book={book} chapter={chapter} />
@@ -147,6 +160,17 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
           >
             <Icon name="columns" size={16} /> Parallel
           </button>
+          {!settings.parallelEnabled && (
+            <button
+              type="button"
+              className={'button ghost small' + (studyOpen ? ' is-active' : '')}
+              onClick={() => setStudyOpen((o) => !o)}
+              aria-pressed={studyOpen}
+              aria-label="Toggle study panel"
+            >
+              <Icon name="sidebar" size={16} /> Study
+            </button>
+          )}
         </div>
       </div>
 
@@ -163,56 +187,74 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
         </p>
       )}
 
-      <article className="reader-body">
-        <h1 className="chapter-heading">
-          {formatReference(book, chapter)}
-          <span className="chapter-heading-translation">
-            {primary.chapter ? primary.chapter.translationName : ''}
-          </span>
-        </h1>
+      <div className="reader-layout">
+        <div className="reader-column">
+          <article className="reader-body">
+            <h1 className="chapter-heading">
+              {formatReference(book, chapter)}
+              <span className="chapter-heading-translation">
+                {primary.chapter ? primary.chapter.translationName : ''}
+              </span>
+            </h1>
 
-        {primary.status === 'loading' && !primary.chapter && <ChapterSkeleton />}
+            {primary.status === 'loading' && !primary.chapter && <ChapterSkeleton />}
 
-        {primary.status === 'error' && !primary.chapter && (
-          <div className="reader-error" role="alert">
-            <p>Couldn’t load this chapter.</p>
-            {primary.error && <p className="muted">{primary.error}</p>}
-            <button type="button" className="button primary" onClick={primary.refetch}>
-              Try again
-            </button>
-          </div>
-        )}
+            {primary.status === 'error' && !primary.chapter && (
+              <div className="reader-error" role="alert">
+                <p>Couldn’t load this chapter.</p>
+                {primary.error && <p className="muted">{primary.error}</p>}
+                <button type="button" className="button primary" onClick={primary.refetch}>
+                  Try again
+                </button>
+              </div>
+            )}
 
-        {primary.chapter && !settings.parallelEnabled && (
-          <ChapterView
+            {primary.chapter && !settings.parallelEnabled && (
+              <ChapterView
+                book={book}
+                chapter={chapter}
+                verses={verses}
+                selectedVerse={selectedVerse}
+                inlineActions={!showStudyPanel}
+                onSelectVerse={setSelectedVerse}
+                onOpenNote={setNoteVerse}
+                onOpenContext={setContextVerse}
+              />
+            )}
+
+            {settings.parallelEnabled && (
+              <ParallelView
+                book={book}
+                chapter={chapter}
+                primaryChapter={primary.chapter}
+                selectedVerse={selectedVerse}
+                onSelectVerse={setSelectedVerse}
+                onOpenNote={setNoteVerse}
+                onOpenContext={setContextVerse}
+              />
+            )}
+
+            {primary.chapter && (
+              <ChapterAttribution translationId={primary.chapter.translationId} />
+            )}
+          </article>
+        </div>
+
+        {showStudyPanel && (
+          <StudyPanel
             book={book}
             chapter={chapter}
+            verse={selectedVerse}
             verses={verses}
-            selectedVerse={selectedVerse}
-            onSelectVerse={setSelectedVerse}
-            onOpenNote={setNoteVerse}
-            onOpenContext={setContextVerse}
+            onOpenNote={(v) => setNoteVerse(v)}
+            onClose={() => setStudyOpen(false)}
           />
         )}
+      </div>
 
-        {settings.parallelEnabled && (
-          <ParallelView
-            book={book}
-            chapter={chapter}
-            primaryChapter={primary.chapter}
-            selectedVerse={selectedVerse}
-            onSelectVerse={setSelectedVerse}
-            onOpenNote={setNoteVerse}
-            onOpenContext={setContextVerse}
-          />
-        )}
-
-        {primary.chapter && (
-          <ChapterAttribution translationId={primary.chapter.translationId} />
-        )}
-      </article>
-
-      <ChapterPager book={book} chapter={chapter} className="reader-pager" />
+      <div className="reader-dock">
+        <ChapterPager book={book} chapter={chapter} currentLabel={formatReference(book, chapter)} />
+      </div>
 
       {noteKey && <NotePopover verseKey={noteKey} onClose={() => setNoteVerse(null)} />}
 

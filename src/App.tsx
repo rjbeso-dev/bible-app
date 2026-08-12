@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Header } from './components/layout/Header'
+import { SideRail } from './components/layout/SideRail'
 import { DashboardPage } from './pages/DashboardPage'
 import { ReaderPage } from './pages/ReaderPage'
 import { NotesPage } from './pages/NotesPage'
@@ -36,15 +36,15 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <Header />
-
-      {!online && (
-        <div className="offline-banner" role="status">
-          You’re offline. Chapters you’ve already opened are still available.
-        </div>
-      )}
+      <SideRail />
 
       <main className="app-main">
+        {!online && (
+          <div className="offline-banner" role="status">
+            You’re offline. Chapters you’ve already opened are still available.
+          </div>
+        )}
+
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/read" element={<ReadRedirect />} />

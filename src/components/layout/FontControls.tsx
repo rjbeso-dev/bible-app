@@ -11,7 +11,12 @@ const FONT_OPTIONS: { value: FontFamily; label: string }[] = [
   { value: 'mono', label: 'Mono' },
 ]
 
-export function FontControls() {
+interface FontControlsProps {
+  /** 'rail' renders the trigger as a full-width rail item and opens the panel to the right. */
+  variant?: 'header' | 'rail'
+}
+
+export function FontControls({ variant = 'header' }: FontControlsProps = {}) {
   const {
     settings,
     setFontFamily,
@@ -19,12 +24,13 @@ export function FontControls() {
     decrementFontScale,
   } = useSettings()
   const [open, setOpen] = useState(false)
+  const isRail = variant === 'rail'
 
   return (
-    <div className="font-controls">
+    <div className={'font-controls' + (isRail ? ' rail-item-wrap' : '')}>
       <button
         type="button"
-        className="icon-button"
+        className={isRail ? 'rail-item' : 'icon-button'}
         aria-haspopup="true"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
@@ -32,6 +38,7 @@ export function FontControls() {
         aria-label="Reading options"
       >
         <Icon name="type" />
+        {isRail && <span className="rail-item-label">Display</span>}
       </button>
 
       {open && (
@@ -41,7 +48,11 @@ export function FontControls() {
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
-          <div className="font-controls-panel" role="dialog" aria-label="Reading options">
+          <div
+            className={'font-controls-panel' + (isRail ? ' panel-right' : '')}
+            role="dialog"
+            aria-label="Reading options"
+          >
             <div className="font-controls-section">
               <span className="font-controls-label">Typeface</span>
               <div className="segmented">

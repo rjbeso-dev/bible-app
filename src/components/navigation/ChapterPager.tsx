@@ -6,9 +6,11 @@ interface ChapterPagerProps {
   book: string
   chapter: number
   className?: string
+  /** Optional label shown between the prev/next buttons, e.g. the current chapter. */
+  currentLabel?: string
 }
 
-export function ChapterPager({ book, chapter, className }: ChapterPagerProps) {
+export function ChapterPager({ book, chapter, className, currentLabel }: ChapterPagerProps) {
   const navigate = useNavigate()
   const prev = prevChapter(book, chapter)
   const next = nextChapter(book, chapter)
@@ -32,6 +34,8 @@ export function ChapterPager({ book, chapter, className }: ChapterPagerProps) {
           {prev ? formatReference(prev.book, prev.chapter) : 'Start'}
         </span>
       </button>
+
+      {currentLabel && <span className="pager-current">{currentLabel}</span>}
 
       <button
         type="button"
