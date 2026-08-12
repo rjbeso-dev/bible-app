@@ -15,13 +15,21 @@ import {
 /** Maximum number of chapters kept in the cache. */
 export const CACHE_CAP = 150
 
+/**
+ * Cache-format version. Bump this whenever the parsed Chapter shape or a source
+ * parser changes, so previously cached (now-stale) chapters are ignored and
+ * refetched instead of served from an old format. Orphaned older-version entries
+ * are evicted naturally as new chapters push them out of the LRU index.
+ */
+export const CACHE_VERSION = 2
+
 /** Build the storage key for a cached chapter. */
 export function cacheKey(
   translationId: string,
   book: string,
   chapter: number,
 ): string {
-  return `${STORAGE_PREFIX}cache.chapter.${translationId}.${book}.${chapter}`
+  return `${STORAGE_PREFIX}cache.v${CACHE_VERSION}.chapter.${translationId}.${book}.${chapter}`
 }
 
 function readIndex(): string[] {
