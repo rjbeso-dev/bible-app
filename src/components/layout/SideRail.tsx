@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { readLastRead } from '../../hooks/useLastRead'
-import { STORAGE_KEYS, readJSON, writeJSON } from '../../lib/storage'
 import { ThemeToggle } from './ThemeToggle'
 import { FontControls } from './FontControls'
 import { MusicControls } from '../audio/MusicControls'
 import { Icon } from '../ui/Icon'
 
-/** Collapsible left navigation rail (a fixed bottom bar on narrow screens). */
+/**
+ * Left navigation rail. Icon-only by default; expands to reveal labels on hover
+ * (Instagram-style). Becomes a fixed bottom bar on narrow screens.
+ */
 export function SideRail() {
   const location = useLocation()
   const last = readLastRead()
@@ -17,19 +18,8 @@ export function SideRail() {
   const onReader = path.startsWith('/read')
   const onNotes = path.startsWith('/notes')
 
-  const [expanded, setExpanded] = useState(() =>
-    readJSON<boolean>(STORAGE_KEYS.railExpanded, false),
-  )
-
-  useEffect(() => {
-    writeJSON(STORAGE_KEYS.railExpanded, expanded)
-  }, [expanded])
-
   return (
-    <nav
-      className={'rail' + (expanded ? ' is-expanded' : ' is-collapsed')}
-      aria-label="Primary"
-    >
+    <nav className="rail" aria-label="Primary">
       <div className="rail-top">
         <Link to="/" className="rail-brand" aria-label="Bible Study home">
           <span className="rail-brand-mark" aria-hidden="true">
@@ -41,7 +31,7 @@ export function SideRail() {
 
       <div className="rail-spacer" aria-hidden="true" />
 
-      {/* Primary nav, vertically centered in the rail. */}
+      {/* One centered stack: primary nav + the reading controls, Instagram-style. */}
       <div className="rail-nav">
         <Link
           to="/"
@@ -67,25 +57,13 @@ export function SideRail() {
           <Icon name="note" size={24} />
           <span className="rail-item-label">Notes</span>
         </Link>
-      </div>
 
-      <div className="rail-spacer" aria-hidden="true" />
-
-      <div className="rail-bottom">
         <MusicControls variant="rail" />
         <FontControls variant="rail" />
         <ThemeToggle variant="rail" />
-        <button
-          type="button"
-          className="rail-item rail-toggle-item"
-          onClick={() => setExpanded((e) => !e)}
-          aria-label={expanded ? 'Collapse navigation' : 'Expand navigation'}
-          aria-expanded={expanded}
-        >
-          <Icon name="menu" size={24} />
-          <span className="rail-item-label">{expanded ? 'Collapse' : 'Menu'}</span>
-        </button>
       </div>
+
+      <div className="rail-spacer" aria-hidden="true" />
     </nav>
   )
 }

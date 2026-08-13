@@ -3,26 +3,31 @@
    =========================================================================== */
 
 .rail {
-  --rail-w-collapsed: 60px;
-  --rail-w-expanded: 186px;
+  --rail-w-collapsed: 64px;
+  --rail-w-expanded: 200px;
 
-  flex: none;
-  width: var(--rail-w-collapsed);
-  position: sticky;
+  position: fixed;
+  left: 0;
   top: 0;
-  align-self: flex-start;
-  height: 100vh;
+  bottom: 0;
+  width: var(--rail-w-collapsed);
   z-index: 40;
   display: flex;
   flex-direction: column;
   background: var(--bg-elevated);
   border-right: 1px solid var(--border);
-  overflow-x: hidden;
-  overflow-y: auto;
-  transition: width 0.15s ease;
+  transition: width 0.18s ease, box-shadow 0.18s ease;
 }
-.rail.is-expanded {
+/* Expand to reveal labels on hover; overlays content (no reflow) thanks to the
+   fixed position + the reserved space on .app-shell. */
+.rail:hover {
   width: var(--rail-w-expanded);
+  box-shadow: var(--shadow-md);
+}
+
+/* Reserve the collapsed rail's width so the fixed rail doesn't cover content. */
+.app-shell {
+  padding-left: var(--rail-w-collapsed, 64px);
 }
 
 .rail-top {
@@ -85,10 +90,26 @@
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
 }
+.rail-item .icon {
+  transition: transform 0.15s ease;
+}
 .rail-item:hover {
   background: var(--surface-hover);
   color: var(--text);
   text-decoration: none;
+}
+/* Instagram-style: the icon springs up a touch on hover, presses in on click. */
+.rail-item:hover .icon {
+  transform: scale(1.12);
+}
+.rail-item:active .icon {
+  transform: scale(0.94);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail-item .icon {
+    transition: none;
+    transform: none !important;
+  }
 }
 /* Simple, Instagram-style active state: the icon takes the brand color, no
    filled pill or bar. */
@@ -105,31 +126,26 @@
   white-space: nowrap;
 }
 
-/* Collapsed rail: hide labels, center icons. */
-.rail.is-collapsed .rail-item-label,
-.rail.is-collapsed .rail-brand-text {
+/* Icons only by default; labels appear when the rail is hovered. */
+.rail-item-label,
+.rail-brand-text {
   display: none;
 }
-.rail.is-collapsed .rail-item {
+.rail:hover .rail-item-label,
+.rail:hover .rail-brand-text {
+  display: inline;
+}
+.rail-item {
   justify-content: center;
   gap: 0;
+}
+.rail:hover .rail-item {
+  justify-content: flex-start;
+  gap: 0.9rem;
 }
 
 .rail-spacer {
   flex: 1;
-}
-.rail-divider {
-  height: 1px;
-  margin: 0.4rem 0.7rem;
-  background: var(--border);
-}
-
-.rail-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.4rem;
-  padding-bottom: 0.7rem;
 }
 
 /* Sound/Display controls, positioned as rail items whose popovers open to
@@ -150,7 +166,11 @@
    =========================================================================== */
 
 @media (max-width: 640px) {
-  .rail {
+  .app-shell {
+    padding-left: 0;
+  }
+  .rail,
+  .rail:hover {
     position: fixed;
     top: auto;
     left: 0;
@@ -163,29 +183,29 @@
     border-right: none;
     border-top: 1px solid var(--border);
     padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-shadow: none;
   }
   .rail-top,
-  .rail-spacer,
-  .rail-divider {
+  .rail-spacer {
     display: none;
   }
-  .rail-nav,
-  .rail-bottom {
+  .rail-nav {
     flex: 1;
     flex-direction: row;
     justify-content: space-around;
     padding: 0.3rem;
   }
   .rail-item,
-  .rail.is-collapsed .rail-item {
+  .rail:hover .rail-item {
     flex-direction: column;
     justify-content: center;
     gap: 0.15rem;
     width: auto;
+    min-height: 0;
     padding: 0.35rem 0.6rem;
   }
   .rail-item-label,
-  .rail.is-collapsed .rail-item-label {
+  .rail:hover .rail-item-label {
     display: none;
   }
   .font-controls-panel.panel-right,
