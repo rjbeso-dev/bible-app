@@ -21,11 +21,12 @@
   transition: width 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
 }
 /* Expand to reveal labels on hover; overlays content (no reflow) thanks to the
-   fixed position + the reserved space on .app-shell. */
+   fixed position + the reserved space on .app-shell. Uses the page background
+   (not an elevated panel) so it stays seamless — the icons/labels float rather
+   than sitting on a visible box. */
 .rail:hover {
   width: var(--rail-w-expanded);
-  background: var(--bg-elevated);
-  box-shadow: var(--shadow-md);
+  background: var(--bg);
 }
 
 /* Reserve the collapsed rail's width so the fixed rail doesn't cover content. */
