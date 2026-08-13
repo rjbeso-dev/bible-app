@@ -42,18 +42,21 @@ interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
 
 // Path/children markup for each icon, drawn on a 24×24 grid.
 const PATHS: Record<IconName, ReactElement> = {
+  // Open book, reads clearly as "read".
   book: (
     <>
-      <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H19a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 0 4 21.5z" />
-      <path d="M4 5.5A2.5 2.5 0 0 0 6.5 8H20" />
+      <path d="M12 6.4C10.2 5.2 7.6 4.8 5 5.2v12.7c2.6-.4 5.2 0 7 1.2" />
+      <path d="M12 6.4c1.8-1.2 4.4-1.6 7-1.2v12.7c-2.6-.4-5.2 0-7 1.2" />
+      <path d="M12 6.4v12.7" />
     </>
   ),
   bookmark: <path d="M6 4h12v16l-6-4-6 4z" />,
+  // A note with a folded corner and a pencil.
   note: (
     <>
-      <path d="M5 4h9l5 5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z" />
-      <path d="M14 4v5h5" />
-      <path d="M8 13h7M8 16.5h5" />
+      <path d="M13.5 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7.5" />
+      <path d="M8.5 9h4M8.5 12.5h3" />
+      <path d="M17 3.5l3.5 3.5L15 12.5l-3.5.5.5-3.5z" />
     </>
   ),
   sun: (
@@ -132,8 +135,8 @@ const PATHS: Record<IconName, ReactElement> = {
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,
   home: (
     <>
-      <path d="M4 11.5 12 4l8 7.5" />
-      <path d="M6 10v10h5v-6h2v6h5V10" />
+      <path d="M3.5 11 12 3.5 20.5 11" />
+      <path d="M5.5 9.5V19a1 1 0 0 0 1 1H9.5v-4.5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V20h3a1 1 0 0 0 1-1V9.5" />
     </>
   ),
   sidebar: (

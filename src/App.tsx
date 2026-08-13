@@ -4,6 +4,7 @@ import { SideRail } from './components/layout/SideRail'
 import { DashboardPage } from './pages/DashboardPage'
 import { ReaderPage } from './pages/ReaderPage'
 import { NotesPage } from './pages/NotesPage'
+import { SearchPage } from './pages/SearchPage'
 import { readLastRead } from './hooks/useLastRead'
 
 function useOnlineStatus(): boolean {
@@ -49,6 +50,7 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/read" element={<ReadRedirect />} />
           <Route path="/read/:book/:chapter" element={<ReaderPage />} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/notes" element={<NotesPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

@@ -16,6 +16,7 @@ export function SideRail() {
   const path = location.pathname
   const onHome = path === '/'
   const onReader = path.startsWith('/read')
+  const onSearch = path.startsWith('/search')
   const onNotes = path.startsWith('/notes')
 
   return (
@@ -47,6 +48,14 @@ export function SideRail() {
         >
           <Icon name="book" size={24} />
           <span className="rail-item-label">Read</span>
+        </Link>
+        <Link
+          to="/search"
+          className={'rail-item' + (onSearch ? ' is-active' : '')}
+          aria-current={onSearch ? 'page' : undefined}
+        >
+          <Icon name="search" size={24} />
+          <span className="rail-item-label">Search</span>
         </Link>
         <Link
           to="/notes"

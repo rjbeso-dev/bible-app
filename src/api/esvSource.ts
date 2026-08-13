@@ -115,3 +115,43 @@ export async function getEsvChapter(
     verses,
   }
 }
+
+export interface SearchResult {
+  /** Human reference from the ESV API, e.g. "John 3:16". */
+  reference: string
+  /** Short snippet of matching text. */
+  content: string
+}
+
+/** Full-text search via the ESV search endpoint (needs the configured key). */
+export async function searchEsv(
+  query: string,
+  opts?: GetChapterOptions,
+): Promise<SearchResult[]> {
+  const params = new URLSearchParams({ q: query, 'page-size': '20' })
+  const url = `/api/esv/v3/passage/search/?${params.toString()}`
+
+  let res: Response
+  try {
+    res = await fetch(url, { signal: opts?.signal })
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') throw err
+    throw new NetworkError('Could not reach the search service.')
+  }
+
+  if (res.status === 401 || res.status === 403 || res.status === 503) {
+    throw new NotConfiguredError(
+      'esv',
+      'Search needs the ESV API key configured on the server.',
+    )
+  }
+  if (!res.ok) throw new NetworkError(`Search failed with status ${res.status}`)
+
+  let json: { results?: SearchResult[] }
+  try {
+    json = (await res.json()) as { results?: SearchResult[] }
+  } catch {
+    throw new ParseError('Search response was not valid JSON')
+  }
+  return (json.results ?? []).map((r) => ({ reference: r.reference, content: r.content }))
+}
