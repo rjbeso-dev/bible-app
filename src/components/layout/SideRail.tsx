@@ -21,11 +21,10 @@ export function SideRail() {
   return (
     <nav className="rail" aria-label="Primary">
       <div className="rail-top">
-        <Link to="/" className="rail-brand" aria-label="Bible Study home">
+        <Link to="/" className="rail-brand" aria-label="Home">
           <span className="rail-brand-mark" aria-hidden="true">
-            <Icon name="sparkle" size={22} />
+            <Icon name="cross" size={24} />
           </span>
-          <span className="rail-item-label rail-brand-text">Bible Study</span>
         </Link>
       </div>
 

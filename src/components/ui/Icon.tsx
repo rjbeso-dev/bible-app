@@ -31,6 +31,7 @@ export type IconName =
   | 'menu'
   | 'home'
   | 'sidebar'
+  | 'cross'
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName
@@ -141,6 +142,8 @@ const PATHS: Record<IconName, ReactElement> = {
       <path d="M15.5 4.5v15" />
     </>
   ),
+  // Latin (Christian) cross.
+  cross: <path d="M12 2.5v19M7.5 8.5h9" />,
 }
 
 export function Icon({ name, size = 18, title, ...rest }: IconProps) {

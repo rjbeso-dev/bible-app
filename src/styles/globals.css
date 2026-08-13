@@ -66,23 +66,23 @@
   --hl-orange: #f8cf9a;
 }
 
-/* Dark theme */
+/* Dark theme — a true neutral black & white (no warm/brown cast). */
 :root[data-theme='dark'] {
-  --bg: #17150f;
-  --bg-elevated: #211e17;
-  --bg-sunken: #100e0a;
-  --surface: #211e17;
-  --surface-hover: #2b271e;
-  --border: #35301f;
-  --border-strong: #4a4330;
-  --text: #ece6d8;
-  --text-muted: #a9a08b;
-  --text-faint: #7d7562;
-  --accent: #d8a15f;
-  --accent-hover: #e6b374;
-  --accent-contrast: #1a1710;
+  --bg: #0a0a0b;
+  --bg-elevated: #161618;
+  --bg-sunken: #050506;
+  --surface: #161618;
+  --surface-hover: #232327;
+  --border: #2a2a2e;
+  --border-strong: #3d3d43;
+  --text: #f3f3f4;
+  --text-muted: #a6a6ac;
+  --text-faint: #73737b;
+  --accent: #ededf0;
+  --accent-hover: #ffffff;
+  --accent-contrast: #0a0a0b;
   --danger: #f28b82;
-  --focus-ring: #d8a15f;
+  --focus-ring: #ededf0;
 
   --hl-yellow: #6e5f1f;
   --hl-green: #3c5a34;

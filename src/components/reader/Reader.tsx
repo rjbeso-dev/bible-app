@@ -244,7 +244,6 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
             book={book}
             chapter={chapter}
             verse={selectedVerse}
-            verses={verses}
             onOpenNote={(v) => setNoteVerse(v)}
             onClose={() => setStudyOpen(false)}
           />
