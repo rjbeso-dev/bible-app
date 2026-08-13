@@ -37,9 +37,11 @@
 .rail-top {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.4rem;
-  padding: 0.85rem 0.6rem 0.6rem;
+  /* Left padding matches the nav icons' column so the logo sits at the same x
+     and doesn't shift when the rail expands on hover. */
+  padding: 0.85rem 0.6rem 0.6rem 1.25rem;
 }
 
 .rail-brand {
@@ -88,7 +90,9 @@
   font-weight: 600;
   font-size: 0.95rem;
   text-align: left;
-  padding: 0.6rem 0.7rem;
+  /* Left padding keeps the icon at a fixed x (≈ rail centre when collapsed) so
+     it doesn't move when the rail expands — only labels appear. */
+  padding: 0.6rem 0.85rem;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
@@ -138,13 +142,10 @@
 .rail:hover .rail-brand-text {
   display: inline;
 }
+/* Icons stay left-anchored (fixed x) in both states so they don't shift on
+   hover; the label simply appears to the right. */
 .rail-item {
-  justify-content: center;
-  gap: 0;
-}
-.rail:hover .rail-item {
   justify-content: flex-start;
-  gap: 0.9rem;
 }
 
 .rail-spacer {
