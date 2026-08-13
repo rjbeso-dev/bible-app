@@ -1,9 +1,11 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useSettings } from '../../context/useSettings'
 import { useChapter } from '../../hooks/useChapter'
 import { useHighlights } from '../../hooks/useHighlights'
 import { useNotes } from '../../hooks/useNotes'
 import { formatReference, verseKey as makeKey } from '../../lib/references'
+import { getCrossRefs, type CrossRef } from '../../data/xrefs'
 import { HighlightMenu } from '../study/HighlightMenu'
 import { Icon } from '../ui/Icon'
 
@@ -36,6 +38,21 @@ export function StudyPanel({ book, chapter, verse, onOpenNote, onClose }: StudyP
     () => (verse != null ? (secondary.chapter?.verses.find((v) => v.verse === verse) ?? null) : null),
     [secondary.chapter, verse],
   )
+
+  const [crossRefs, setCrossRefs] = useState<CrossRef[]>([])
+  useEffect(() => {
+    if (verse == null) {
+      setCrossRefs([])
+      return
+    }
+    let active = true
+    void getCrossRefs(book, chapter, verse).then((refs) => {
+      if (active) setCrossRefs(refs)
+    })
+    return () => {
+      active = false
+    }
+  }, [book, chapter, verse])
 
   if (verse == null || !key || !reference) {
     return (
@@ -97,6 +114,26 @@ export function StudyPanel({ book, chapter, verse, onOpenNote, onClose }: StudyP
           <p className="study-panel-note-empty muted">Loading…</p>
         ) : (
           <p className="study-panel-note-empty muted">Not available in this translation.</p>
+        )}
+      </section>
+
+      <section className="study-panel-section" aria-labelledby="study-xref-h">
+        <h3 id="study-xref-h" className="study-panel-label">
+          Cross-references
+        </h3>
+        {crossRefs.length > 0 ? (
+          <>
+            <ul className="study-panel-xrefs">
+              {crossRefs.map((ref) => (
+                <li key={ref.href}>
+                  <Link to={ref.href}>{ref.label}</Link>
+                </li>
+              ))}
+            </ul>
+            <p className="study-panel-xref-credit">Cross-references: OpenBible.info (CC BY)</p>
+          </>
+        ) : (
+          <p className="study-panel-note-empty muted">No cross-references for this verse.</p>
         )}
       </section>
     </aside>

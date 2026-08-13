@@ -376,6 +376,24 @@
   color: var(--text-faint);
   text-transform: uppercase;
 }
+.study-panel-xrefs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.study-panel-xrefs a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.study-panel-xref-credit {
+  margin: 0.2rem 0 0;
+  font-size: 0.7rem;
+  color: var(--text-faint);
+}
 @media (max-width: 960px) {
   .study-panel {
     position: static;

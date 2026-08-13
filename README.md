@@ -11,7 +11,8 @@ Free scripture text comes from [bible-api.com](https://bible-api.com). ESV and
 NLT are fetched through a server-side proxy that injects an API key from an
 environment variable — the key is never exposed to the browser and readers are
 never asked for one. Book introductions and the daily-verse list are bundled
-locally.
+locally. Cross-references come from [OpenBible.info](https://www.openbible.info/labs/cross-references/)
+(CC BY), processed into one compact, lazily-loaded file per book.
 
 ## The home dashboard
 
