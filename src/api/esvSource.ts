@@ -4,7 +4,7 @@
 // browser never sees or supplies a key.
 //
 // Endpoint:
-//   GET /api/esv/v3/passage/text/?q={ref}&include-verse-numbers=true&...
+//   GET /api/esv/text?q={ref}&include-verse-numbers=true&...
 // Response: { passages: [string], ... } where verse text carries `[n]` markers.
 
 import type { Chapter, Verse } from '../types'
@@ -68,7 +68,7 @@ export async function getEsvChapter(
     'include-passage-references': 'false',
     'include-short-copyright': 'false',
   })
-  const url = `/api/esv/v3/passage/text/?${params.toString()}`
+  const url = `/api/esv/text?${params.toString()}`
 
   let res: Response
   try {
@@ -129,7 +129,7 @@ export async function searchEsv(
   opts?: GetChapterOptions,
 ): Promise<SearchResult[]> {
   const params = new URLSearchParams({ q: query, 'page-size': '20' })
-  const url = `/api/esv/v3/passage/search/?${params.toString()}`
+  const url = `/api/esv/search?${params.toString()}`
 
   let res: Response
   try {

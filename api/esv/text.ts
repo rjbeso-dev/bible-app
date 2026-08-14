@@ -1,22 +1,22 @@
-// Vercel serverless function: authenticated reverse-proxy for the ESV API.
+// Vercel serverless function: authenticated reverse-proxy for the ESV passage-text endpoint.
 //
-// The browser calls `/api/esv/v3/passage/text/?q=...` with no key. This function
-// injects `Authorization: Token ${ESV_API_KEY}` (a Vercel Project env var) and
-// forwards to api.esv.org, so the key never reaches the client. Locally this
-// role is played by the Vite dev proxy in vite.config.ts.
+// The browser calls `/api/esv/text?q=...` with no key. This function injects
+// `Authorization: Token ${ESV_API_KEY}` (a Vercel Project env var) and forwards
+// to api.esv.org/v3/passage/text/, so the key never reaches the client.
+// Locally this role is played by the Vite dev proxy in vite.config.ts.
+//
+// Fixed, single-segment route rather than a `[...path]` catch-all: Vercel's
+// Vite-preset build step compiles catch-all API routes to a regex that only
+// matches one path segment (`[^/]+`), confirmed directly in the generated
+// `.vercel/output/config.json` — so a genuine multi-segment catch-all silently
+// 404s on deeper paths in production. This proxy only ever needs one upstream
+// endpoint, so hardcoding it here sidesteps that bug entirely.
 //
 // Configure the key once in the Vercel dashboard: Settings → Environment
 // Variables → ESV_API_KEY. Get a free key at https://api.esv.org/.
-//
-// Runs on the standard Node.js runtime rather than Edge: Edge's catch-all
-// route matching ([...path].ts) only reliably invoked for single-segment
-// paths in production, silently 404ing on the multi-segment passage paths
-// this proxy actually needs (verified via Vercel function logs — deeper
-// paths never appeared as invocations at all). The Node runtime's catch-all
-// matching is the older, more mature mechanism and doesn't share that gap.
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-const UPSTREAM = 'https://api.esv.org'
+const UPSTREAM = 'https://api.esv.org/v3/passage/text/'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const key = process.env.ESV_API_KEY?.trim()
@@ -26,8 +26,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const incoming = new URL(req.url ?? '/', 'http://internal')
-  const path = incoming.pathname.replace(/^\/api\/esv\/?/, '')
-  const target = new URL(`${UPSTREAM}/${path}`)
+  const target = new URL(UPSTREAM)
   target.search = incoming.search
 
   let upstream: Response

@@ -4,7 +4,7 @@
 // browser never sees or supplies a key.
 //
 // Endpoint:
-//   GET /api/nlt/api/passages?ref={ref}&version=NLT
+//   GET /api/nlt/passages?ref={ref}&version=NLT
 // Response: HTML containing <verse_export data-vn="n"> elements.
 
 import type { Chapter, Verse } from '../types'
@@ -98,7 +98,7 @@ export async function getNltChapter(
     ref: referenceQuery(book, chapter),
     version: 'NLT',
   })
-  const url = `/api/nlt/api/passages?${params.toString()}`
+  const url = `/api/nlt/passages?${params.toString()}`
 
   let res: Response
   try {

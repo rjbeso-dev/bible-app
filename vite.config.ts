@@ -18,10 +18,24 @@ export default defineConfig(({ mode }) => {
       proxy: {
         // Forward ESV requests to api.esv.org, injecting the Authorization
         // header server-side. Sidesteps browser CORS and hides the key.
-        '/api/esv': {
+        // The client only ever calls the two fixed short paths below (see
+        // api/esv/text.ts and api/esv/search.ts for why they're fixed rather
+        // than a generic catch-all), so the dev proxy maps them explicitly
+        // to the real upstream endpoints.
+        '/api/esv/text': {
           target: 'https://api.esv.org',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api\/esv/, ''),
+          rewrite: (path) => path.replace(/^\/api\/esv\/text/, '/v3/passage/text/'),
+          configure: (proxy) => {
+            proxy.on('proxyReq', (proxyReq) => {
+              if (esvKey) proxyReq.setHeader('Authorization', `Token ${esvKey}`)
+            })
+          },
+        },
+        '/api/esv/search': {
+          target: 'https://api.esv.org',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/esv\/search/, '/v3/passage/search/'),
           configure: (proxy) => {
             proxy.on('proxyReq', (proxyReq) => {
               if (esvKey) proxyReq.setHeader('Authorization', `Token ${esvKey}`)
@@ -29,11 +43,11 @@ export default defineConfig(({ mode }) => {
           },
         },
         // Forward NLT requests to api.nlt.to, appending the key as a query param.
-        '/api/nlt': {
+        '/api/nlt/passages': {
           target: 'https://api.nlt.to',
           changeOrigin: true,
           rewrite: (path) => {
-            const stripped = path.replace(/^\/api\/nlt/, '')
+            const stripped = path.replace(/^\/api\/nlt\/passages/, '/api/passages')
             if (!nltKey) return stripped
             const sep = stripped.includes('?') ? '&' : '?'
             return `${stripped}${sep}key=${encodeURIComponent(nltKey)}`

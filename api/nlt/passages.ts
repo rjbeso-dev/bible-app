@@ -1,22 +1,18 @@
-// Vercel serverless function: authenticated reverse-proxy for the NLT API.
+// Vercel serverless function: authenticated reverse-proxy for the NLT passages endpoint.
 //
-// The browser calls `/api/nlt/api/passages?ref=...` with no key. This function
+// The browser calls `/api/nlt/passages?ref=...` with no key. This function
 // appends `key=${NLT_API_KEY}` (a Vercel Project env var) and forwards to
-// api.nlt.to, so the key never reaches the client. Locally this role is
-// played by the Vite dev proxy in vite.config.ts.
+// api.nlt.to/api/passages, so the key never reaches the client. Locally this
+// role is played by the Vite dev proxy in vite.config.ts.
+//
+// Fixed, single-segment route rather than a `[...path]` catch-all — see
+// api/esv/text.ts for why.
 //
 // Configure the key once in the Vercel dashboard: Settings → Environment
 // Variables → NLT_API_KEY. Get a free key at https://api.nlt.to/.
-//
-// Runs on the standard Node.js runtime rather than Edge: Edge's catch-all
-// route matching ([...path].ts) only reliably invoked for single-segment
-// paths in production, silently 404ing on the multi-segment passage paths
-// this proxy actually needs (verified via Vercel function logs — deeper
-// paths never appeared as invocations at all). The Node runtime's catch-all
-// matching is the older, more mature mechanism and doesn't share that gap.
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
-const UPSTREAM = 'https://api.nlt.to'
+const UPSTREAM = 'https://api.nlt.to/api/passages'
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const key = process.env.NLT_API_KEY?.trim()
@@ -26,8 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const incoming = new URL(req.url ?? '/', 'http://internal')
-  const path = incoming.pathname.replace(/^\/api\/nlt\/?/, '')
-  const target = new URL(`${UPSTREAM}/${path}`)
+  const target = new URL(UPSTREAM)
   target.search = incoming.search
   target.searchParams.set('key', key)
 
