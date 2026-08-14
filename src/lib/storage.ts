@@ -22,6 +22,31 @@ export const STORAGE_KEYS = {
 
 export const STORAGE_VERSION = 1
 
+// The keys that participate in optional cloud sync. Writes to these keys
+// dispatch a window CustomEvent so a signed-in SyncProvider can debounce-push
+// the change to the cloud; everything else (cache, audio, UI prefs) is local
+// only and never triggers it.
+const SYNCED_KEYS = new Set<string>([
+  STORAGE_KEYS.notes,
+  STORAGE_KEYS.highlights,
+  STORAGE_KEYS.readChapters,
+  STORAGE_KEYS.recentChapters,
+  STORAGE_KEYS.settings,
+  STORAGE_KEYS.lastRead,
+])
+
+/** Notify listeners (e.g. cloud sync) that a synced key changed. Never throws. */
+function notifyDataChanged(key: string): void {
+  if (!SYNCED_KEYS.has(key)) return
+  try {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('bsa:datachanged', { detail: { key } }))
+    }
+  } catch {
+    // ignore
+  }
+}
+
 /** Return the localStorage object, or null if unavailable (SSR, privacy mode). */
 function getStore(): Storage | null {
   try {
@@ -61,12 +86,14 @@ export function writeJSON(
   if (serialized === null) return false
   try {
     store.setItem(key, serialized)
+    notifyDataChanged(key)
     return true
   } catch (err) {
     if (isQuotaError(err) && onQuotaExceeded) {
       try {
         onQuotaExceeded()
         store.setItem(key, serialized)
+        notifyDataChanged(key)
         return true
       } catch {
         return false

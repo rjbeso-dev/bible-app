@@ -97,6 +97,43 @@ message; the free public-domain translations always work. When an ESV or NLT
 chapter is shown, the required copyright line appears beneath it (ESV® ©
 Crossway; NLT © Tyndale House Foundation).
 
+## Accounts & sync (optional)
+
+By default the app is fully local — no accounts, nothing leaves your browser.
+You can optionally turn on sign-in (Google, via Supabase) so your notes,
+highlights, reading progress, and settings sync across your devices. With no
+Supabase keys configured, the app runs exactly as before and no account UI
+appears at all — this is entirely opt-in.
+
+1. **Create a free Supabase project** at [supabase.com](https://supabase.com).
+2. **Run the schema.** Open your project's SQL Editor and run
+   [`supabase/schema.sql`](supabase/schema.sql) — it creates one table
+   (`user_state`) that stores a single JSON blob per signed-in user, protected
+   by Row-Level Security so each user can only ever read or write their own row.
+3. **Enable Google sign-in.** In Supabase: **Authentication → Providers →
+   Google** → enable it. This needs a Google OAuth client from the
+   [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+   (OAuth consent screen + an OAuth 2.0 Client ID, type "Web application").
+   Add Supabase's callback URL (shown on the Google provider page in Supabase,
+   looks like `https://<project-ref>.supabase.co/auth/v1/callback`) as an
+   authorized redirect URI on the Google client, then paste the Google Client
+   ID/Secret into Supabase's Google provider settings.
+4. **Add the keys.** From your Supabase project → **Settings → API**, copy the
+   Project URL and the `anon` public key into `.env.local`:
+   ```
+   VITE_SUPABASE_URL=https://your-project.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key
+   ```
+   (The anon key is safe to expose in the browser — Row-Level Security is what
+   actually protects the data.) Add the same two variables to your Vercel
+   project's environment variables for production, then restart `npm run dev`
+   or redeploy.
+
+Once configured, a "Sign in" item appears at the bottom of the rail. Signing in
+pulls any existing cloud data, merges it with what's on the device (newest
+wins, nothing is lost), and keeps syncing in the background as you read, note,
+and highlight.
+
 ## Getting started
 
 Requires Node 20+ (built and tested on Node 24).
@@ -121,7 +158,11 @@ npm run coverage
 ## Where your data is stored
 
 All user data lives in the browser's `localStorage` under the `bsa.` prefix —
-no accounts, no backend, nothing leaves your device:
+no accounts, no backend, nothing leaves your device, unless you opt in to sync
+(see [Accounts & sync](#accounts--sync-optional) above), in which case
+`bsa.settings`, `bsa.lastRead`, `bsa.notes`, `bsa.highlights`,
+`bsa.readChapters`, and `bsa.recentChapters` also sync to your Supabase
+project under your account:
 
 | Key | Contents |
 | --- | --- |

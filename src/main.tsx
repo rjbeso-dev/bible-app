@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { SettingsProvider } from './context/SettingsProvider'
 import { AudioProvider } from './context/AudioProvider'
+import { AuthProvider } from './context/AuthProvider'
+import { SyncProvider } from './context/SyncProvider'
 import './styles/globals.css'
 import './styles/reader.css'
 import './styles/dashboard.css'
@@ -17,7 +19,11 @@ createRoot(rootEl).render(
     <BrowserRouter>
       <SettingsProvider>
         <AudioProvider>
-          <App />
+          <AuthProvider>
+            <SyncProvider>
+              <App />
+            </SyncProvider>
+          </AuthProvider>
         </AudioProvider>
       </SettingsProvider>
     </BrowserRouter>

@@ -3,6 +3,7 @@ import { readLastRead } from '../../hooks/useLastRead'
 import { ThemeToggle } from './ThemeToggle'
 import { FontControls } from './FontControls'
 import { MusicControls } from '../audio/MusicControls'
+import { AccountControls } from '../account/AccountControls'
 import { Icon } from '../ui/Icon'
 
 /**
@@ -69,6 +70,7 @@ export function SideRail() {
         <MusicControls variant="rail" />
         <FontControls variant="rail" />
         <ThemeToggle variant="rail" />
+        <AccountControls />
       </div>
 
       <div className="rail-spacer" aria-hidden="true" />

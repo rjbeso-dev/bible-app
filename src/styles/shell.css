@@ -158,7 +158,8 @@
   position: relative;
 }
 .font-controls-panel.panel-right,
-.music-panel.panel-right {
+.music-panel.panel-right,
+.account-panel.panel-right {
   left: calc(100% + 0.6rem);
   right: auto;
   top: 0;
@@ -214,7 +215,8 @@
     display: none;
   }
   .font-controls-panel.panel-right,
-  .music-panel.panel-right {
+  .music-panel.panel-right,
+  .account-panel.panel-right {
     left: 50%;
     top: auto;
     bottom: calc(100% + 0.6rem);

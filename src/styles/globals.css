@@ -465,6 +465,53 @@ a:hover {
 }
 
 /* ===========================================================================
+   Account controls
+   =========================================================================== */
+
+.account-controls {
+  position: relative;
+}
+.account-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 50;
+  width: 16rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.account-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.account-email {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.account-status {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.account-note {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* ===========================================================================
    Modals
    =========================================================================== */
 
