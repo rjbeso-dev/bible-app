@@ -241,3 +241,54 @@
   width: 100%;
   justify-content: space-between;
 }
+
+/* ===========================================================================
+   Profile page
+   =========================================================================== */
+
+.profile-masthead {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 0.5rem 0 1.75rem;
+}
+.profile-avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  border: 1px solid var(--border);
+}
+.profile-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-sunken);
+  color: var(--text-faint);
+}
+.profile-identity {
+  min-width: 0;
+}
+.profile-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--step-3);
+  line-height: 1.1;
+  color: var(--text);
+}
+.profile-email {
+  margin: 0.25rem 0 0;
+  font-size: var(--step-0);
+}
+.profile-since {
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+}
+.profile-stats {
+  margin-bottom: 1.5rem;
+}
+.profile-account-note {
+  margin-bottom: 0.75rem;
+}

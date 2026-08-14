@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
 import { Icon } from '../ui/Icon'
 
@@ -58,6 +59,9 @@ export function AccountControls() {
                   <p className="account-email">{user.email ?? displayName(user)}</p>
                   <p className="account-status">Synced</p>
                 </div>
+                <Link to="/profile" className="button ghost small" onClick={() => setOpen(false)}>
+                  View profile
+                </Link>
                 <button
                   type="button"
                   className="button ghost small"
