@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { getBook } from '../../data/books'
-import { BIBLE_PROJECT_VIDEOS, bibleProjectHref } from '../../data/bibleProjectVideos'
+import { BIBLE_PROJECT_VIDEOS } from '../../data/bibleProjectVideos'
+import { BibleProjectPlayer } from './BibleProjectPlayer'
 import { Icon } from '../ui/Icon'
 
 interface BookIntroProps {
@@ -13,6 +15,7 @@ interface BookIntroProps {
 export function BookIntro({ book, open, onClose }: BookIntroProps) {
   const meta = getBook(book)
   const videos = BIBLE_PROJECT_VIDEOS[book]
+  const [playing, setPlaying] = useState<{ slug: string; title: string } | null>(null)
   if (!meta || !open) return null
   return (
     <aside className="book-intro" aria-label={`About ${meta.name}`}>
@@ -64,20 +67,29 @@ export function BookIntro({ book, open, onClose }: BookIntroProps) {
         <div className="book-intro-watch">
           <span className="book-intro-watch-label">Watch</span>
           <div className="book-intro-watch-links">
-            {videos.map((v) => (
-              <a
-                key={v.slug}
-                href={bibleProjectHref(v.slug)}
-                target="_blank"
-                rel="noreferrer"
-                className="button ghost small"
-              >
-                {v.label ? `BibleProject — ${v.label}` : 'Watch on BibleProject'}
-                <Icon name="arrow-right" size={14} />
-              </a>
-            ))}
+            {videos.map((v) => {
+              const title = v.label ? `${meta.name} — ${v.label}` : meta.name
+              return (
+                <button
+                  key={v.slug}
+                  type="button"
+                  className="button ghost small"
+                  onClick={() => setPlaying({ slug: v.slug, title })}
+                >
+                  <Icon name="play" size={14} />
+                  {v.label ? `BibleProject — ${v.label}` : 'Watch on BibleProject'}
+                </button>
+              )
+            })}
           </div>
         </div>
+      )}
+      {playing && (
+        <BibleProjectPlayer
+          slug={playing.slug}
+          title={playing.title}
+          onClose={() => setPlaying(null)}
+        />
       )}
     </aside>
   )
