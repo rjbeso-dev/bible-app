@@ -138,6 +138,13 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   overflow: hidden;
+  transform-origin: top left;
+  animation: pop-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .book-picker-panel {
+    animation: none;
+  }
 }
 .book-picker-columns {
   display: grid;
@@ -354,7 +361,7 @@
 
 .verse-row {
   border-radius: var(--radius-sm);
-  transition: background 0.12s ease;
+  transition: background-color var(--dur-fast) var(--ease-standard);
 }
 .verse-row.is-selected {
   background: color-mix(in srgb, var(--accent) 8%, transparent);
@@ -371,6 +378,7 @@
   margin: 0;
   cursor: pointer;
   border-radius: var(--radius-sm);
+  transition: background-color var(--dur-fast) var(--ease-standard);
 }
 .verse-body:hover {
   background: var(--surface-hover);
@@ -503,6 +511,7 @@
 .parallel-row {
   border-radius: var(--radius-sm);
   padding: 0.15rem 0;
+  transition: background-color var(--dur-fast) var(--ease-standard);
 }
 .parallel-row.is-selected {
   background: color-mix(in srgb, var(--accent) 8%, transparent);

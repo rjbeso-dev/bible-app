@@ -164,6 +164,7 @@
   right: auto;
   top: 0;
   bottom: auto;
+  transform-origin: top left;
 }
 
 /* ===========================================================================
@@ -217,10 +218,14 @@
   .font-controls-panel.panel-right,
   .music-panel.panel-right,
   .account-panel.panel-right {
-    left: 50%;
+    /* Centered via inset + auto margins (not transform) so the pop-in
+       animation's transform doesn't fight this resting position. */
+    left: 0;
+    right: 0;
     top: auto;
     bottom: calc(100% + 0.6rem);
-    transform: translateX(-50%);
+    margin-inline: auto;
+    transform-origin: bottom center;
   }
 
   .app-main {
@@ -317,6 +322,22 @@
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
+  animation: study-panel-in var(--dur-base) var(--ease-out);
+}
+@keyframes study-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .study-panel {
+    animation: none;
+  }
 }
 .study-panel-hint {
   margin: 0;

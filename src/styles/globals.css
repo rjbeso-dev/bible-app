@@ -38,6 +38,13 @@
 
   --maxw-reader: 44rem;
   --maxw-app: 72rem;
+
+  /* Shared motion tokens, so transitions across the app feel like one system. */
+  --ease-out: cubic-bezier(0.16, 0.8, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast: 0.15s;
+  --dur-base: 0.22s;
+  --dur-slow: 0.5s;
 }
 
 /* Light theme (default) */
@@ -116,6 +123,97 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* ===========================================================================
+   Motion — theme switch, and a baseline color-transition for the rest
+   =========================================================================== */
+
+/* Circular reveal for the theme toggle (View Transitions API). Expands from
+   the click point ThemeToggle records in --vt-x/--vt-y. Browsers without
+   support (or with reduced motion) just apply the theme change instantly —
+   see src/lib/viewTransition.ts. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-reveal var(--dur-slow) var(--ease-out);
+  animation-fill-mode: both;
+}
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0% at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}
+
+/* Shared entrance for popovers/panels: a quick pop rather than an abrupt
+   appear. Each panel sets its own transform-origin near its anchor. */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* A baseline crossfade for anything that changes color with the theme (also
+   the fallback on browsers without the View Transitions API above). Scoped to
+   surfaces rather than a blanket `*` so it never fights a component's own
+   transition (e.g. the rail's hover width, the icon hover scale). */
+@media (prefers-reduced-motion: no-preference) {
+  body,
+  .rail,
+  .dash-card,
+  .study-panel,
+  .book-intro,
+  .verse-row,
+  .parallel-row,
+  .button,
+  .icon-button,
+  .rail-item,
+  input,
+  select,
+  textarea,
+  .search-input,
+  .chapter-cell,
+  .book-item,
+  .segmented-item {
+    transition: background-color var(--dur-base) var(--ease-standard),
+      border-color var(--dur-base) var(--ease-standard),
+      color var(--dur-base) var(--ease-standard),
+      box-shadow var(--dur-base) var(--ease-standard);
+  }
+}
+
 /* Reader typeface driven by data-font on <html>. */
 :root[data-font='serif'] .reader-body { font-family: var(--font-serif); }
 :root[data-font='sans'] .reader-body { font-family: var(--font-sans); }
@@ -148,6 +246,25 @@ a:hover {
   min-height: 100%;
   display: flex;
   align-items: stretch;
+}
+
+.page-transition {
+  animation: page-fade-in var(--dur-base) var(--ease-out);
+}
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-transition {
+    animation: none;
+  }
 }
 
 .app-main {
@@ -295,6 +412,13 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  transform-origin: top right;
+  animation: pop-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .font-controls-panel {
+    animation: none;
+  }
 }
 .font-controls-section {
   display: flex;
@@ -394,6 +518,13 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+  transform-origin: top right;
+  animation: pop-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .music-panel {
+    animation: none;
+  }
 }
 .music-transport {
   display: flex;
@@ -485,6 +616,13 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  transform-origin: top right;
+  animation: pop-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .account-panel {
+    animation: none;
+  }
 }
 .account-section {
   display: flex;
@@ -524,6 +662,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  animation: fade-in var(--dur-fast) var(--ease-standard);
 }
 .modal {
   width: 100%;
@@ -535,6 +674,13 @@ a:hover {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 1.1rem 1.25rem 1.25rem;
+  animation: modal-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay,
+  .modal {
+    animation: none;
+  }
 }
 .modal-header {
   display: flex;

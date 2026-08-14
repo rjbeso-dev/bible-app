@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import type { ReactNode } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { SideRail } from './components/layout/SideRail'
 import { DashboardPage } from './pages/DashboardPage'
 import { ReaderPage } from './pages/ReaderPage'
@@ -33,6 +34,26 @@ function ReadRedirect() {
   )
 }
 
+/** First path segment, e.g. "read" for "/read/john/3", "" for "/". */
+function topLevelSection(pathname: string): string {
+  return pathname.split('/')[1] ?? ''
+}
+
+/**
+ * Fades in when the top-level section changes (Home → Read → Search → …).
+ * Keyed by section rather than the full pathname so paging chapters within
+ * the reader (/read/john/1 → /read/john/2) doesn't remount the page or
+ * replay the animation — only switching sections does.
+ */
+function PageTransition({ children }: { children: ReactNode }) {
+  const location = useLocation()
+  return (
+    <div key={topLevelSection(location.pathname)} className="page-transition">
+      {children}
+    </div>
+  )
+}
+
 export default function App() {
   const online = useOnlineStatus()
 
@@ -47,15 +68,17 @@ export default function App() {
           </div>
         )}
 
-        <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/read" element={<ReadRedirect />} />
-          <Route path="/read/:book/:chapter" element={<ReaderPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/notes" element={<NotesPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <PageTransition>
+          <Routes>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/read" element={<ReadRedirect />} />
+            <Route path="/read/:book/:chapter" element={<ReaderPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/notes" element={<NotesPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </PageTransition>
       </main>
     </div>
   )
