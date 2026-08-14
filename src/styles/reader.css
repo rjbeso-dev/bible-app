@@ -350,6 +350,26 @@
   }
 }
 
+.book-intro-watch {
+  margin: 0.9rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+.book-intro-watch-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  font-weight: 700;
+}
+.book-intro-watch-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 /* ===========================================================================
    Verses
    =========================================================================== */

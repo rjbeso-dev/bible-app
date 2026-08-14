@@ -417,6 +417,30 @@
   font-size: 0.7rem;
   color: var(--text-faint);
 }
+.study-panel-commentary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+.study-panel-commentary-select {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.4rem;
+  max-width: 9.5rem;
+}
+.study-panel-commentary-text {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-serif);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text);
+}
 @media (max-width: 960px) {
   .study-panel {
     position: static;

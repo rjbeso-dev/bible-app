@@ -1,4 +1,5 @@
 import { getBook } from '../../data/books'
+import { BIBLE_PROJECT_VIDEOS, bibleProjectHref } from '../../data/bibleProjectVideos'
 import { Icon } from '../ui/Icon'
 
 interface BookIntroProps {
@@ -11,6 +12,7 @@ interface BookIntroProps {
 /** Renders the static per-book introduction from books.ts. */
 export function BookIntro({ book, open, onClose }: BookIntroProps) {
   const meta = getBook(book)
+  const videos = BIBLE_PROJECT_VIDEOS[book]
   if (!meta || !open) return null
   return (
     <aside className="book-intro" aria-label={`About ${meta.name}`}>
@@ -58,6 +60,25 @@ export function BookIntro({ book, open, onClose }: BookIntroProps) {
           <dd>{meta.themes}</dd>
         </div>
       </dl>
+      {videos && (
+        <div className="book-intro-watch">
+          <span className="book-intro-watch-label">Watch</span>
+          <div className="book-intro-watch-links">
+            {videos.map((v) => (
+              <a
+                key={v.slug}
+                href={bibleProjectHref(v.slug)}
+                target="_blank"
+                rel="noreferrer"
+                className="button ghost small"
+              >
+                {v.label ? `BibleProject — ${v.label}` : 'Watch on BibleProject'}
+                <Icon name="arrow-right" size={14} />
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </aside>
   )
 }

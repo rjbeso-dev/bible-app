@@ -12,7 +12,12 @@ NLT are fetched through a server-side proxy that injects an API key from an
 environment variable — the key is never exposed to the browser and readers are
 never asked for one. Book introductions and the daily-verse list are bundled
 locally. Cross-references come from [OpenBible.info](https://www.openbible.info/labs/cross-references/)
-(CC BY), processed into one compact, lazily-loaded file per book.
+(CC BY), processed into one compact, lazily-loaded file per book. Verse-by-verse
+commentary (Matthew Henry, Jamieson-Fausset-Brown, John Gill, Adam Clarke,
+Keil-Delitzsch, John Calvin, and the Tyndale Open Study Notes) is fetched live
+from the [HelloAO Free Use Bible API](https://bible.helloao.org/) — mostly
+public-domain, with Tyndale under CC BY-SA 4.0. Each book's intro links out to
+its [BibleProject](https://bibleproject.com/) overview video where one exists.
 
 ## The home dashboard
 
