@@ -10,6 +10,12 @@
 
 const UPSTREAM = 'https://api.esv.org'
 
+// This handler uses the Web Fetch API signature (Request → Response), which
+// only Vercel's Edge Runtime understands — the default Node.js runtime expects
+// a (req, res) callback instead and crashes (FUNCTION_INVOCATION_FAILED) if it
+// receives a returned Response object. This config line is required.
+export const config = { runtime: 'edge' }
+
 export default async function handler(req: Request): Promise<Response> {
   const key = process.env.ESV_API_KEY?.trim()
   if (!key) {
