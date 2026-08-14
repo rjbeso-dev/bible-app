@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { getBook } from '../../data/books'
 import { BIBLE_PROJECT_VIDEOS, bibleProjectHref } from '../../data/bibleProjectVideos'
+import { YouTubePlayer } from './YouTubePlayer'
 import { Icon } from '../ui/Icon'
 
 interface BookIntroProps {
@@ -13,6 +15,7 @@ interface BookIntroProps {
 export function BookIntro({ book, open, onClose }: BookIntroProps) {
   const meta = getBook(book)
   const videos = BIBLE_PROJECT_VIDEOS[book]
+  const [playing, setPlaying] = useState<{ videoId: string; title: string } | null>(null)
   if (!meta || !open) return null
   return (
     <aside className="book-intro" aria-label={`About ${meta.name}`}>
@@ -64,20 +67,44 @@ export function BookIntro({ book, open, onClose }: BookIntroProps) {
         <div className="book-intro-watch">
           <span className="book-intro-watch-label">Watch</span>
           <div className="book-intro-watch-links">
-            {videos.map((v) => (
-              <a
-                key={v.slug}
-                href={bibleProjectHref(v.slug)}
-                target="_blank"
-                rel="noreferrer"
-                className="button ghost small"
-              >
-                <Icon name="play" size={14} />
-                {v.label ? `BibleProject — ${v.label}` : 'Watch on BibleProject'}
-              </a>
-            ))}
+            {videos.map((v) => {
+              const title = v.label ? `${meta.name} — ${v.label}` : meta.name
+              const label = v.label ? `BibleProject — ${v.label}` : 'Watch on BibleProject'
+              if (v.youtubeId) {
+                return (
+                  <button
+                    key={v.slug}
+                    type="button"
+                    className="button ghost small"
+                    onClick={() => setPlaying({ videoId: v.youtubeId!, title })}
+                  >
+                    <Icon name="play" size={14} />
+                    {label}
+                  </button>
+                )
+              }
+              return (
+                <a
+                  key={v.slug}
+                  href={bibleProjectHref(v.slug)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button ghost small"
+                >
+                  <Icon name="play" size={14} />
+                  {label}
+                </a>
+              )
+            })}
           </div>
         </div>
+      )}
+      {playing && (
+        <YouTubePlayer
+          videoId={playing.videoId}
+          title={playing.title}
+          onClose={() => setPlaying(null)}
+        />
       )}
     </aside>
   )
