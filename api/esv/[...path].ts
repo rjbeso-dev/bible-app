@@ -7,22 +7,25 @@
 //
 // Configure the key once in the Vercel dashboard: Settings → Environment
 // Variables → ESV_API_KEY. Get a free key at https://api.esv.org/.
+//
+// Runs on the standard Node.js runtime rather than Edge: Edge's catch-all
+// route matching ([...path].ts) only reliably invoked for single-segment
+// paths in production, silently 404ing on the multi-segment passage paths
+// this proxy actually needs (verified via Vercel function logs — deeper
+// paths never appeared as invocations at all). The Node runtime's catch-all
+// matching is the older, more mature mechanism and doesn't share that gap.
+import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 const UPSTREAM = 'https://api.esv.org'
 
-// This handler uses the Web Fetch API signature (Request → Response), which
-// only Vercel's Edge Runtime understands — the default Node.js runtime expects
-// a (req, res) callback instead and crashes (FUNCTION_INVOCATION_FAILED) if it
-// receives a returned Response object. This config line is required.
-export const config = { runtime: 'edge' }
-
-export default async function handler(req: Request): Promise<Response> {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   const key = process.env.ESV_API_KEY?.trim()
   if (!key) {
-    return json({ error: 'ESV_API_KEY is not configured on this deployment.' }, 503)
+    res.status(503).json({ error: 'ESV_API_KEY is not configured on this deployment.' })
+    return
   }
 
-  const incoming = new URL(req.url)
+  const incoming = new URL(req.url ?? '/', 'http://internal')
   const path = incoming.pathname.replace(/^\/api\/esv\/?/, '')
   const target = new URL(`${UPSTREAM}/${path}`)
   target.search = incoming.search
@@ -33,23 +36,14 @@ export default async function handler(req: Request): Promise<Response> {
       headers: { Authorization: `Token ${key}` },
     })
   } catch {
-    return json({ error: 'Could not reach the ESV service.' }, 502)
+    res.status(502).json({ error: 'Could not reach the ESV service.' })
+    return
   }
 
   const body = await upstream.text()
-  return new Response(body, {
-    status: upstream.status,
-    headers: {
-      'content-type': upstream.headers.get('content-type') ?? 'application/json',
-      // Cache successful passages at the edge for a day; they never change.
-      'cache-control': upstream.ok ? 'public, max-age=86400' : 'no-store',
-    },
-  })
-}
-
-function json(data: unknown, status: number): Response {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { 'content-type': 'application/json' },
-  })
+  res.status(upstream.status)
+  res.setHeader('content-type', upstream.headers.get('content-type') ?? 'application/json')
+  // Cache successful passages at the edge for a day; they never change.
+  res.setHeader('cache-control', upstream.ok ? 'public, max-age=86400' : 'no-store')
+  res.send(body)
 }
