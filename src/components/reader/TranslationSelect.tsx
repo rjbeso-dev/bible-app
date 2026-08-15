@@ -1,6 +1,7 @@
-import { useId, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { bibleSource } from '../../api'
 import type { Translation, TranslationGroup } from '../../api'
+import { Icon } from '../ui/Icon'
 
 interface TranslationSelectProps {
   value: string
@@ -18,14 +19,18 @@ const GROUP_LABELS: Record<TranslationGroup, string> = {
   licensed: 'Study translations',
 }
 
+/** Custom-styled translation picker — a native <select>'s open dropdown can't
+ * be themed (it renders as an unstyled OS popup), so this is a button +
+ * listbox instead, following the same pattern as BookChapterPicker. */
 export function TranslationSelect({
   value,
   onChange,
   label = 'Translation',
   compact,
 }: TranslationSelectProps) {
-  const id = useId()
+  const [open, setOpen] = useState(false)
   const translations = bibleSource.listTranslations()
+  const current = translations.find((t) => t.id === value)
 
   const grouped = useMemo(() => {
     const byGroup = new Map<TranslationGroup, Translation[]>()
@@ -41,27 +46,65 @@ export function TranslationSelect({
     }))
   }, [translations])
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    if (open) window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
+
+  const pick = (id: string) => {
+    setOpen(false)
+    onChange(id)
+  }
+
   return (
-    <div className={'translation-select' + (compact ? ' is-compact' : '')}>
-      <label htmlFor={id} className="translation-select-label">
-        {label}
-      </label>
-      <select
-        id={id}
-        className="translation-select-input"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+    <div className={'translation-picker' + (compact ? ' is-compact' : '')}>
+      {!compact && <span className="translation-select-label">{label}</span>}
+      <button
+        type="button"
+        className="translation-picker-trigger"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-label={compact ? label : undefined}
+        onClick={() => setOpen((o) => !o)}
       >
-        {grouped.map((section) => (
-          <optgroup key={section.group} label={section.label}>
-            {section.items.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
+        <span className="translation-picker-trigger-label">{current?.name ?? value}</span>
+        <Icon name="chevron-down" size={14} className="translation-picker-caret" />
+      </button>
+
+      {open && (
+        <>
+          <div className="popover-backdrop" onClick={() => setOpen(false)} aria-hidden="true" />
+          <div className="translation-picker-panel" role="listbox" aria-label={label}>
+            {grouped.map((section) => (
+              <div
+                key={section.group}
+                className="translation-picker-group"
+                role="group"
+                aria-label={section.label}
+              >
+                <div className="translation-picker-group-title" aria-hidden="true">
+                  {section.label}
+                </div>
+                {section.items.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    role="option"
+                    aria-selected={t.id === value}
+                    className={'translation-picker-item' + (t.id === value ? ' is-current' : '')}
+                    onClick={() => pick(t.id)}
+                  >
+                    {t.name}
+                  </button>
+                ))}
+              </div>
             ))}
-          </optgroup>
-        ))}
-      </select>
+          </div>
+        </>
+      )}
     </div>
   )
 }

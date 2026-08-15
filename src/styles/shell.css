@@ -450,17 +450,14 @@
 .commentary-popup-ref {
   margin-bottom: 0.4rem;
 }
-.study-panel-section .translation-select {
+.study-panel-section .translation-picker {
   display: flex;
   width: 100%;
 }
-.study-panel-section .translation-select-input {
+.study-panel-section .translation-picker-trigger {
   width: 100%;
   font-size: 0.85rem;
   padding: 0.35rem 0.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .study-panel-commentary-text {
   margin: 0.4rem 0 0;

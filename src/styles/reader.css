@@ -27,10 +27,10 @@
     width: 100%;
     flex-wrap: wrap;
   }
-  .reader-toolbar-right .translation-select {
+  .reader-toolbar-right .translation-picker {
     flex: 1 1 100%;
   }
-  .reader-toolbar-right .translation-select-input {
+  .reader-toolbar-right .translation-picker-trigger {
     width: 100%;
   }
 }
@@ -82,13 +82,17 @@
 }
 
 /* ===========================================================================
-   Translation select
+   Translation picker — a custom listbox, not a native <select>: the
+   dropdown popup of a native select is unstyleable OS chrome, so this
+   follows the same button + panel pattern as the book/chapter picker.
    =========================================================================== */
 
-.translation-select {
+.translation-picker {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
+  min-width: 0;
 }
 .translation-select-label {
   font-size: 0.75rem;
@@ -97,10 +101,12 @@
   color: var(--text-faint);
   font-weight: 700;
 }
-.translation-select.is-compact .translation-select-label {
-  display: none;
-}
-.translation-select-input {
+.translation-picker-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  max-width: 100%;
   font: inherit;
   font-size: 0.9rem;
   font-weight: 600;
@@ -110,6 +116,78 @@
   border-radius: var(--radius-md);
   padding: 0.4rem 0.6rem;
   cursor: pointer;
+}
+.translation-picker-trigger:hover {
+  background: var(--surface-hover);
+}
+.translation-picker-trigger-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.translation-picker-caret {
+  flex: none;
+  color: var(--text-faint);
+}
+
+.translation-picker-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 50;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(20rem, 92vw);
+  max-height: min(24rem, 70vh);
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 0.5rem;
+  transform-origin: top right;
+  animation: pop-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .translation-picker-panel {
+    animation: none;
+  }
+}
+.translation-picker-group + .translation-picker-group {
+  margin-top: 0.6rem;
+}
+.translation-picker-group-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  font-weight: 700;
+  padding: 0.3rem 0.5rem;
+}
+.translation-picker-item {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.translation-picker-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.translation-picker-item.is-current {
+  background: var(--surface);
+  color: var(--accent);
+  font-weight: 700;
 }
 
 /* ===========================================================================

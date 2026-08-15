@@ -62,6 +62,7 @@ describe('SettingsProvider theme init (F8)', () => {
 describe('TranslationSelect (F2)', () => {
   it('lists every curated translation, grouped by reading level', () => {
     render(<TranslationSelect value="web" onChange={() => {}} />)
+    fireEvent.click(screen.getByRole('button', { name: /World English Bible/ }))
     const options = screen.getAllByRole('option')
     expect(options).toHaveLength(bibleSource.listTranslations().length)
     // Six free versions plus five licensed ones (ESV, NLT, NIV, AMP, NASB).
@@ -69,7 +70,7 @@ describe('TranslationSelect (F2)', () => {
     expect(
       screen.getByRole('option', { name: 'King James Version (Classic)' }),
     ).toBeInTheDocument()
-    // Reading-level groups are present as <optgroup> labels.
+    // Reading-level groups are present.
     expect(screen.getByRole('group', { name: 'Easy to read' })).toBeInTheDocument()
     expect(screen.getByRole('group', { name: 'Study translations' })).toBeInTheDocument()
     // Licensed versions appear by plain name (no user-facing key marker).
@@ -81,7 +82,8 @@ describe('TranslationSelect (F2)', () => {
   it('fires onChange with the selected translation id', () => {
     const onChange = vi.fn()
     render(<TranslationSelect value="web" onChange={onChange} />)
-    fireEvent.change(screen.getByRole('combobox'), { target: { value: 'kjv' } })
+    fireEvent.click(screen.getByRole('button', { name: /World English Bible/ }))
+    fireEvent.click(screen.getByRole('option', { name: 'King James Version (Classic)' }))
     expect(onChange).toHaveBeenCalledWith('kjv')
   })
 })
