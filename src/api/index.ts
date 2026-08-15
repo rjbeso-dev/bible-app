@@ -9,10 +9,18 @@ import type { BibleSource, GetChapterOptions, Translation } from './bibleSource'
 import { bibleApiSource } from './bibleApiSource'
 import { ESV_TRANSLATION, getEsvChapter } from './esvSource'
 import { NLT_TRANSLATION, getNltChapter } from './nltSource'
+import { API_BIBLE_TRANSLATIONS, getApiBibleChapter } from './apiBibleSource'
+
+const API_BIBLE_IDS = new Set(API_BIBLE_TRANSLATIONS.map((t) => t.id))
 
 class RouterSource implements BibleSource {
   listTranslations(): Translation[] {
-    return [...bibleApiSource.listTranslations(), ESV_TRANSLATION, NLT_TRANSLATION]
+    return [
+      ...bibleApiSource.listTranslations(),
+      ESV_TRANSLATION,
+      NLT_TRANSLATION,
+      ...API_BIBLE_TRANSLATIONS,
+    ]
   }
 
   getChapter(
@@ -27,6 +35,9 @@ class RouterSource implements BibleSource {
       case 'nlt':
         return getNltChapter(book, chapter, opts)
       default:
+        if (API_BIBLE_IDS.has(translationId)) {
+          return getApiBibleChapter(book, chapter, translationId, opts)
+        }
         return bibleApiSource.getChapter(book, chapter, translationId, opts)
     }
   }

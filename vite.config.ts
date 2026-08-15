@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const esvKey = env.ESV_API_KEY?.trim()
   const nltKey = env.NLT_API_KEY?.trim()
+  const apiBibleKey = env.API_BIBLE_KEY?.trim()
 
   return {
     plugins: [react()],
@@ -51,6 +52,35 @@ export default defineConfig(({ mode }) => {
             if (!nltKey) return stripped
             const sep = stripped.includes('?') ? '&' : '?'
             return `${stripped}${sep}key=${encodeURIComponent(nltKey)}`
+          },
+        },
+        // Forward NIV/AMP/NASB requests to rest.api.bible, injecting the
+        // api-key header server-side. The client passes bibleId/usfm as
+        // query params (see api/bible/chapter.ts); the real upstream wants
+        // them as path segments, so this rewrite reconstructs the path.
+        '/api/bible/chapter': {
+          target: 'https://rest.api.bible',
+          changeOrigin: true,
+          rewrite: (path) => {
+            const incoming = new URL(path, 'http://internal')
+            const bibleId = incoming.searchParams.get('bibleId') ?? ''
+            const usfm = incoming.searchParams.get('usfm') ?? ''
+            const target = new URL(
+              `/v1/bibles/${encodeURIComponent(bibleId)}/chapters/${encodeURIComponent(usfm)}`,
+              'http://internal',
+            )
+            target.searchParams.set('content-type', 'text')
+            target.searchParams.set('include-verse-numbers', 'true')
+            target.searchParams.set('include-titles', 'false')
+            target.searchParams.set('include-notes', 'false')
+            target.searchParams.set('include-chapter-numbers', 'false')
+            target.searchParams.set('fums-version', '3')
+            return target.pathname + target.search
+          },
+          configure: (proxy) => {
+            proxy.on('proxyReq', (proxyReq) => {
+              if (apiBibleKey) proxyReq.setHeader('api-key', apiBibleKey)
+            })
           },
         },
       },

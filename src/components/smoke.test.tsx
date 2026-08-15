@@ -64,8 +64,8 @@ describe('TranslationSelect (F2)', () => {
     render(<TranslationSelect value="web" onChange={() => {}} />)
     const options = screen.getAllByRole('option')
     expect(options).toHaveLength(bibleSource.listTranslations().length)
-    // Six free versions plus the two licensed ones (ESV, NLT).
-    expect(options).toHaveLength(8)
+    // Six free versions plus five licensed ones (ESV, NLT, NIV, AMP, NASB).
+    expect(options).toHaveLength(11)
     expect(
       screen.getByRole('option', { name: 'King James Version (Classic)' }),
     ).toBeInTheDocument()

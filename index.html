@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A clean Bible study reader with notes, highlights, parallel translations, and offline caching. Your data stays in your browser." />
     <title>Bible Study</title>
+    <!-- API.Bible's Fair Use Management System (NIV/AMP/NASB usage
+         reporting — see src/lib/fums.ts). The queue-shim makes fums()
+         safe to call before this script finishes loading. -->
+    <script>
+      window.fumsData = window.fumsData || [];
+      window.fums = window.fums || function () { window.fumsData.push(arguments); };
+    </script>
+    <script src="https://pkg.api.bible/fumsV3.min.js" async></script>
   </head>
   <body>
     <div id="root"></div>
