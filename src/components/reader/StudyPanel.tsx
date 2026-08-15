@@ -108,17 +108,15 @@ export function StudyPanel({ book, chapter, verse, onOpenNote, onClose }: StudyP
       </section>
 
       <section className="study-panel-section" aria-labelledby="study-parallel-h">
-        <div className="study-panel-commentary-head">
-          <h3 id="study-parallel-h" className="study-panel-label">
-            Parallel
-          </h3>
-          <TranslationSelect
-            compact
-            label="Compare with"
-            value={settings.secondaryTranslation}
-            onChange={setSecondaryTranslation}
-          />
-        </div>
+        <h3 id="study-parallel-h" className="study-panel-label">
+          Parallel
+        </h3>
+        <TranslationSelect
+          compact
+          label="Compare with"
+          value={settings.secondaryTranslation}
+          onChange={setSecondaryTranslation}
+        />
         {secondaryVerse ? (
           <>
             <p className="study-panel-parallel-text">{secondaryVerse.text}</p>

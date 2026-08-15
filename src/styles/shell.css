@@ -428,19 +428,20 @@
   font-size: 0.7rem;
   color: var(--text-faint);
 }
-.study-panel-commentary-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-}
 .commentary-popup-ref {
   margin-bottom: 0.4rem;
 }
-.study-panel-commentary-head .translation-select-input {
-  font-size: 0.78rem;
-  padding: 0.2rem 0.4rem;
-  max-width: 9.5rem;
+.study-panel-section .translation-select {
+  display: flex;
+  width: 100%;
+}
+.study-panel-section .translation-select-input {
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .study-panel-commentary-text {
   margin: 0.4rem 0 0;
