@@ -56,6 +56,12 @@ export function DashboardPage() {
   const snippet = snippetFrom(continueChapter.chapter?.verses)
 
   const daily = verseOfTheDay(now)
+  // Verse of the day always shows in ESV; the bundled text (WEB, public
+  // domain) renders instantly and this fetch swaps it in once it lands, or
+  // stays as the fallback if ESV isn't configured on this deployment.
+  const dailyEsv = useChapter(daily.book, daily.chapter, 'esv')
+  const dailyEsvVerse = dailyEsv.chapter?.verses.find((v) => v.verse === daily.verse)
+  const dailyText = dailyEsvVerse?.text ?? daily.text
 
   const recentNotes = useMemo(
     () => [...notes].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3),
@@ -103,7 +109,7 @@ export function DashboardPage() {
           <section className="dash-card dash-daily" aria-labelledby="dash-daily-h">
             <p className="dash-eyebrow">Verse of the day</p>
             <p className="dash-ref-sc" id="dash-daily-h">{daily.ref}</p>
-            <p className="dash-verse">{daily.text}</p>
+            <p className="dash-verse">{dailyText}</p>
             <Link
               to={readerHref(daily.book, daily.chapter, daily.verse)}
               className="dash-inline-link"

@@ -218,18 +218,37 @@
   .font-controls-panel.panel-right,
   .music-panel.panel-right,
   .account-panel.panel-right {
-    /* Centered via inset + auto margins (not transform) so the pop-in
-       animation's transform doesn't fight this resting position. */
+    /* `fixed` (not `absolute`) so this centers on the viewport rather than
+       on the trigger's own narrow wrapper — an `absolute` panel centered
+       via inset + auto margins centers within its positioned ancestor
+       (the trigger button), which drifts off-screen for any icon that
+       isn't dead-center in the bottom bar. Centered via inset + auto
+       margins (not transform) so the pop-in animation's transform doesn't
+       fight this resting position. */
+    position: fixed;
     left: 0;
     right: 0;
     top: auto;
-    bottom: calc(100% + 0.6rem);
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px) + 0.6rem);
     margin-inline: auto;
     transform-origin: bottom center;
   }
 
   .app-main {
     padding-bottom: 4.5rem;
+  }
+}
+
+/* Eight icons at the 640px breakpoint's padding no longer fit once the
+   viewport itself drops much below ~360px (the narrowest common phones,
+   e.g. 320px) — tighten up further so nothing clips off the right edge. */
+@media (max-width: 360px) {
+  .rail-nav {
+    padding: 0.3rem 0.1rem;
+  }
+  .rail-item,
+  .rail:hover .rail-item {
+    padding: 0.35rem 0.3rem;
   }
 }
 
