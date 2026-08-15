@@ -407,10 +407,21 @@
   flex-direction: column;
   gap: 0.35rem;
 }
-.study-panel-xrefs a {
+.study-panel-list-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--accent);
+  background: none;
+  border: 0;
+  padding: 0.1rem 0;
+  cursor: pointer;
+}
+.study-panel-list-item:hover {
+  text-decoration: underline;
 }
 .study-panel-xref-credit {
   margin: 0.2rem 0 0;
@@ -423,14 +434,11 @@
   justify-content: space-between;
   gap: 0.6rem;
 }
-.study-panel-commentary-select {
-  font: inherit;
+.commentary-popup-ref {
+  margin-bottom: 0.4rem;
+}
+.study-panel-commentary-head .translation-select-input {
   font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
   padding: 0.2rem 0.4rem;
   max-width: 9.5rem;
 }

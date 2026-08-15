@@ -13,6 +13,12 @@ export interface CrossRef {
   label: string
   /** Reader route with a verse hash, e.g. "/read/john/3#v-16". */
   href: string
+  /** Target chapter number. */
+  chapter: number
+  /** Target verse number (start of the range). */
+  verse: number
+  /** End of a same-chapter verse range, if any. */
+  endVerse?: number
 }
 
 type RawEntry = number[]
@@ -58,7 +64,14 @@ export async function getCrossRefs(
     const v = e[2]
     const end = e[3]
     const label = end ? `${meta.name} ${c}:${v}–${end}` : `${meta.name} ${c}:${v}`
-    refs.push({ id: meta.id, label, href: `/read/${encodeURIComponent(meta.id)}/${c}#v-${v}` })
+    refs.push({
+      id: meta.id,
+      label,
+      href: `/read/${encodeURIComponent(meta.id)}/${c}#v-${v}`,
+      chapter: c,
+      verse: v,
+      endVerse: end || undefined,
+    })
   }
   return refs
 }
