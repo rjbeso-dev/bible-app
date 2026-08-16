@@ -346,6 +346,15 @@ a:hover {
   color: #fff;
   border-color: var(--danger);
 }
+.button.ghost.danger {
+  background: transparent;
+  color: var(--danger);
+  border-color: var(--border);
+}
+.button.ghost.danger:hover {
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
+  border-color: var(--danger);
+}
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;

@@ -114,3 +114,51 @@ describe('useNotes: persistence & sync', () => {
     expect(b.result.current.hasNote('acts.2.38')).toBe(true)
   })
 })
+
+describe('useNotes: standalone notes (no verse tie)', () => {
+  it('adds a standalone note with no verseKey', async () => {
+    const { renderHook, act, useNotes } = await freshNotes()
+    const { result } = renderHook(() => useNotes())
+    act(() => {
+      result.current.addStandaloneNote({ title: 'Sunday sermon', body: 'Outline…' })
+    })
+    expect(result.current.notes).toHaveLength(1)
+    expect(result.current.notes[0].verseKey).toBeUndefined()
+    expect(result.current.notes[0].title).toBe('Sunday sermon')
+  })
+
+  it('ignores an empty/whitespace body', async () => {
+    const { renderHook, act, useNotes } = await freshNotes()
+    const { result } = renderHook(() => useNotes())
+    let created: unknown
+    act(() => {
+      created = result.current.addStandaloneNote({ title: 'x', body: '   ' })
+    })
+    expect(created).toBeNull()
+    expect(result.current.notes).toHaveLength(0)
+  })
+
+  it('updates title/reference/body independently via updateNoteFields', async () => {
+    const { renderHook, act, useNotes } = await freshNotes()
+    const { result } = renderHook(() => useNotes())
+    let id = ''
+    act(() => {
+      id = result.current.addStandaloneNote({ title: 'first', body: 'draft' })!.id
+    })
+    act(() => {
+      result.current.updateNoteFields(id, { title: 'revised' })
+    })
+    const note = result.current.notes.find((n) => n.id === id)!
+    expect(note.title).toBe('revised')
+    expect(note.body).toBe('draft')
+  })
+
+  it('does not surface a standalone note under a verse key', async () => {
+    const { renderHook, act, useNotes } = await freshNotes()
+    const { result } = renderHook(() => useNotes())
+    act(() => {
+      result.current.addStandaloneNote({ body: 'general note' })
+    })
+    expect(result.current.hasNote('john.3.16')).toBe(false)
+  })
+})

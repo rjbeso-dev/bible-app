@@ -74,8 +74,12 @@ export interface Highlight {
 
 export interface Note {
   id: string
-  verseKey: string
-  reference: string
+  /** Present for notes tied to a single verse (added while reading). */
+  verseKey?: string
+  /** Verse reference (verse-tied notes) or a short label (standalone notes). */
+  reference?: string
+  /** User-chosen title for a standalone note, e.g. "Sunday sermon — Romans 8". */
+  title?: string
   body: string
   createdAt: number
   updatedAt: number

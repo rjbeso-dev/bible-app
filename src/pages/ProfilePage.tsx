@@ -185,12 +185,12 @@ function RecentRow({ chapter }: { chapter: RecentChapter }) {
 }
 
 function NoteRow({ note }: { note: Note }) {
-  const parsed = parseVerseKey(note.verseKey)
-  const href = parsed ? readerHref(parsed.book, parsed.chapter, parsed.verse) : '/notes'
+  const parsed = note.verseKey ? parseVerseKey(note.verseKey) : null
+  const href = parsed ? readerHref(parsed.book, parsed.chapter, parsed.verse) : `/notes/${note.id}`
   return (
     <li className="dash-row">
       <Link to={href} className="dash-row-link dash-row-note">
-        <span className="dash-row-ref">{note.reference}</span>
+        <span className="dash-row-ref">{note.reference ?? note.title ?? 'Note'}</span>
         <span className="dash-row-preview">{note.body}</span>
       </Link>
     </li>

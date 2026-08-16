@@ -20,6 +20,7 @@ export type IconName =
   | 'info'
   | 'plus'
   | 'trash'
+  | 'edit'
   | 'arrow-right'
   | 'close'
   | 'key'
@@ -110,6 +111,12 @@ const PATHS: Record<IconName, ReactElement> = {
     </>
   ),
   'arrow-right': <path d="M4 12h15M13 6l6 6-6 6" />,
+  edit: (
+    <>
+      <path d="M4 20l1-4.2L15.2 5.6a1.5 1.5 0 0 1 2.1 0l1.1 1.1a1.5 1.5 0 0 1 0 2.1L8.2 19 4 20z" />
+      <path d="M13.5 7.3l3.2 3.2" />
+    </>
+  ),
   close: <path d="M6 6l12 12M18 6L6 18" />,
   key: (
     <>

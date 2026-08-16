@@ -7,9 +7,11 @@ import { Icon } from '../ui/Icon'
 interface BookChapterPickerProps {
   book: string
   chapter: number
+  /** When set, called with the pick instead of navigating to /read/:book/:chapter. */
+  onSelect?: (book: string, chapter: number) => void
 }
 
-export function BookChapterPicker({ book, chapter }: BookChapterPickerProps) {
+export function BookChapterPicker({ book, chapter, onSelect }: BookChapterPickerProps) {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const current = getBook(book)
@@ -37,7 +39,11 @@ export function BookChapterPicker({ book, chapter }: BookChapterPickerProps) {
 
   const pickChapter = (bookId: string, ch: number) => {
     setOpen(false)
-    navigate(`/read/${encodeURIComponent(bookId)}/${ch}`)
+    if (onSelect) {
+      onSelect(bookId, ch)
+    } else {
+      navigate(`/read/${encodeURIComponent(bookId)}/${ch}`)
+    }
   }
 
   return (

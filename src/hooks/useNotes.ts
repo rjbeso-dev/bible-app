@@ -7,7 +7,7 @@ function loadNotes(): Note[] {
   if (!Array.isArray(raw)) return []
   return raw.filter(
     (n): n is Note =>
-      !!n && typeof n.id === 'string' && typeof n.verseKey === 'string',
+      !!n && typeof n.id === 'string' && typeof n.body === 'string',
   )
 }
 
@@ -42,6 +42,12 @@ function setNotes(next: Note[]): void {
   listeners.forEach((l) => l(next))
 }
 
+export interface StandaloneNoteInput {
+  title?: string
+  reference?: string
+  body: string
+}
+
 export interface UseNotesResult {
   notes: Note[]
   notesFor: (verseKey: string) => Note[]
@@ -49,6 +55,10 @@ export interface UseNotesResult {
   updateNote: (id: string, body: string) => void
   deleteNote: (id: string) => void
   hasNote: (verseKey: string) => boolean
+  /** Create a note with no verse tie, e.g. sermon prep spanning a passage. */
+  addStandaloneNote: (input: StandaloneNoteInput) => Note | null
+  /** Update any combination of a note's title/reference/body (standalone or verse-tied). */
+  updateNoteFields: (id: string, patch: Partial<StandaloneNoteInput>) => void
 }
 
 export function useNotes(): UseNotesResult {
@@ -90,6 +100,36 @@ export function useNotes(): UseNotesResult {
     setNotes(next)
   }, [])
 
+  const addStandaloneNote = useCallback((input: StandaloneNoteInput): Note | null => {
+    const trimmed = input.body.trim()
+    if (!trimmed) return null
+    const now = Date.now()
+    const note: Note = {
+      id: newId(),
+      title: input.title?.trim() || undefined,
+      reference: input.reference?.trim() || undefined,
+      body: trimmed,
+      createdAt: now,
+      updatedAt: now,
+    }
+    setNotes([...getNotes(), note])
+    return note
+  }, [])
+
+  const updateNoteFields = useCallback((id: string, patch: Partial<StandaloneNoteInput>) => {
+    const next = getNotes().map((n) => {
+      if (n.id !== id) return n
+      return {
+        ...n,
+        ...(patch.title !== undefined && { title: patch.title.trim() || undefined }),
+        ...(patch.reference !== undefined && { reference: patch.reference.trim() || undefined }),
+        ...(patch.body !== undefined && { body: patch.body.trim() }),
+        updatedAt: Date.now(),
+      }
+    })
+    setNotes(next)
+  }, [])
+
   const deleteNote = useCallback((id: string) => {
     setNotes(getNotes().filter((n) => n.id !== id))
   }, [])
@@ -104,5 +144,14 @@ export function useNotes(): UseNotesResult {
     [notes],
   )
 
-  return { notes, notesFor, addNote, updateNote, deleteNote, hasNote }
+  return {
+    notes,
+    notesFor,
+    addNote,
+    updateNote,
+    deleteNote,
+    hasNote,
+    addStandaloneNote,
+    updateNoteFields,
+  }
 }
