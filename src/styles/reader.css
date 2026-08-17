@@ -962,6 +962,16 @@
   background: var(--surface);
   color: var(--text-faint);
 }
+.rich-editor-swatch-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.8rem;
+  /* color is set inline per-swatch (the actual text color it applies) */
+}
 .rich-editor-body {
   flex: 1;
   min-height: 0;

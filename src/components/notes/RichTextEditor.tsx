@@ -31,6 +31,16 @@ const HIGHLIGHT_COLORS = [
   { name: 'Orange', hex: '#f8cf9a' },
 ]
 
+// Saturated enough to read as intentional text color against either theme's
+// surface, unlike the pale HIGHLIGHT_COLORS above (which are backgrounds).
+const FONT_COLORS = [
+  { name: 'Red', hex: '#d64545' },
+  { name: 'Orange', hex: '#d98736' },
+  { name: 'Green', hex: '#4f9d5c' },
+  { name: 'Blue', hex: '#4a7fd6' },
+  { name: 'Purple', hex: '#8b5fc9' },
+]
+
 export interface RichTextEditorHandle {
   /** Insert HTML at the last known cursor position (works even if focus is
    * currently elsewhere, e.g. the user just clicked a verse in the side panel). */
@@ -88,6 +98,23 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
         editorRef.current?.focus()
         document.execCommand('hiliteColor', false, hex ?? 'transparent')
         if (hex) document.execCommand('foreColor', false, '#1a1a1a')
+        emitChange()
+      },
+      [emitChange],
+    )
+
+    const fontColor = useCallback(
+      (hex: string | null) => {
+        const el = editorRef.current
+        if (!el) return
+        el.focus()
+        // execCommand('foreColor', ...) doesn't understand cascade
+        // keywords — passing 'inherit' was observed applying
+        // rgba(0,0,0,0) (fully transparent, i.e. invisible text)
+        // rather than resetting anything. Resolve the theme's actual
+        // text color first so "default" sets a real, opaque value.
+        const resetColor = hex ?? getComputedStyle(el).color
+        document.execCommand('foreColor', false, resetColor)
         emitChange()
       },
       [emitChange],
@@ -194,6 +221,35 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
               title="Remove highlight"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => highlight(null)}
+            >
+              <Icon name="close" size={12} />
+            </button>
+          </div>
+
+          <span className="rich-editor-toolbar-divider" aria-hidden="true" />
+
+          <div className="rich-editor-swatches" role="group" aria-label="Text color">
+            {FONT_COLORS.map((c) => (
+              <button
+                key={c.name}
+                type="button"
+                className="rich-editor-swatch rich-editor-swatch-letter"
+                style={{ color: c.hex }}
+                aria-label={`${c.name} text`}
+                title={`${c.name} text`}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => fontColor(c.hex)}
+              >
+                A
+              </button>
+            ))}
+            <button
+              type="button"
+              className="rich-editor-swatch rich-editor-swatch-none"
+              aria-label="Default text color"
+              title="Default text color"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => fontColor(null)}
             >
               <Icon name="close" size={12} />
             </button>
