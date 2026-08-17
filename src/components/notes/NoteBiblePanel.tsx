@@ -8,8 +8,15 @@ import { TranslationSelect } from '../reader/TranslationSelect'
 import { Icon } from '../ui/Icon'
 
 interface NoteBiblePanelProps {
-  onInsert: (text: string) => void
+  onInsert: (html: string) => void
   onClose: () => void
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
 }
 
 /** Read-only Bible browser beside the note composer — click a verse to quote
@@ -43,7 +50,8 @@ export function NoteBiblePanel({ onInsert, onClose }: NoteBiblePanelProps) {
             className="note-bible-verse"
             onClick={() =>
               onInsert(
-                `> ${formatReference(book, chapter, v.verse)} (${data.translationId.toUpperCase()}) — ${v.text}\n\n`,
+                `<div class="note-quote"><strong>${escapeHtml(formatReference(book, chapter, v.verse))}</strong> ` +
+                  `<em>(${escapeHtml(data.translationId.toUpperCase())})</em><br>${escapeHtml(v.text)}</div><p><br></p>`,
               )
             }
           >

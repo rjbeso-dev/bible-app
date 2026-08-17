@@ -1,12 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { useNotes } from '../hooks/useNotes'
 import { NoteBiblePanel } from '../components/notes/NoteBiblePanel'
+import { RichTextEditor, type RichTextEditorHandle } from '../components/notes/RichTextEditor'
+import { plainTextToHtml } from '../lib/sanitizeNoteHtml'
 import { Icon } from '../components/ui/Icon'
 
 /** Full-page note composer: write a long-form note (sermon prep, study
- * outline) with an optional side panel to browse the Bible and quote verses
- * in, without leaving the page. Also used to edit an existing note. */
+ * outline) with a formatting toolbar and an optional side panel to browse
+ * the Bible and quote verses in, without leaving the page. Also used to
+ * edit an existing note. */
 export function NoteComposerPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -15,14 +18,11 @@ export function NoteComposerPage() {
 
   const [title, setTitle] = useState(existing?.title ?? '')
   const [reference, setReference] = useState(existing?.reference ?? '')
-  const [body, setBody] = useState(existing?.body ?? '')
+  const bodyRef = useRef({ html: existing?.bodyHtml ?? '', text: existing?.body ?? '' })
+  const [hasBody, setHasBody] = useState(!!existing?.body.trim())
   const [bibleOpen, setBibleOpen] = useState(false)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-
-  useEffect(() => {
-    if (!existing) textareaRef.current?.focus()
-  }, [existing])
+  const editorRef = useRef<RichTextEditorHandle>(null)
 
   // Editing a note that doesn't exist (bad id, or it was deleted elsewhere).
   if (id && !existing) {
@@ -30,31 +30,16 @@ export function NoteComposerPage() {
   }
 
   const isVerseTied = !!existing?.verseKey
-
-  const insertQuote = (text: string) => {
-    const el = textareaRef.current
-    if (!el) {
-      setBody((b) => b + (b && !b.endsWith('\n') ? '\n\n' : '') + text)
-      return
-    }
-    const start = el.selectionStart ?? el.value.length
-    const end = el.selectionEnd ?? el.value.length
-    const next = el.value.slice(0, start) + text + el.value.slice(end)
-    setBody(next)
-    requestAnimationFrame(() => {
-      el.focus()
-      const caret = start + text.length
-      el.setSelectionRange(caret, caret)
-    })
-  }
+  const initialHtml = existing?.bodyHtml ?? (existing?.body ? plainTextToHtml(existing.body) : '')
 
   const save = () => {
-    const trimmed = body.trim()
+    const { html, text } = bodyRef.current
+    const trimmed = text.trim()
     if (!trimmed) return
     if (existing) {
-      updateNoteFields(existing.id, { title, reference, body: trimmed })
+      updateNoteFields(existing.id, { title, reference, body: trimmed, bodyHtml: html })
     } else {
-      addStandaloneNote({ title, reference, body: trimmed })
+      addStandaloneNote({ title, reference, body: trimmed, bodyHtml: html })
     }
     navigate('/notes')
   }
@@ -109,12 +94,14 @@ export function NoteComposerPage() {
             value={reference}
             onChange={(e) => setReference(e.target.value)}
           />
-          <textarea
-            ref={textareaRef}
-            className="note-composer-body"
+          <RichTextEditor
+            ref={editorRef}
+            initialHtml={initialHtml}
             placeholder="Write your note. Open the Bible to quote a verse in as you go…"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
+            onChange={(html, text) => {
+              bodyRef.current = { html, text }
+              setHasBody(!!text.trim())
+            }}
           />
 
           <footer className="note-composer-footer">
@@ -145,14 +132,17 @@ export function NoteComposerPage() {
             <button type="button" className="button ghost" onClick={() => navigate('/notes')}>
               Cancel
             </button>
-            <button type="button" className="button primary" onClick={save} disabled={!body.trim()}>
+            <button type="button" className="button primary" onClick={save} disabled={!hasBody}>
               Save note
             </button>
           </footer>
         </div>
 
         {bibleOpen && (
-          <NoteBiblePanel onInsert={insertQuote} onClose={() => setBibleOpen(false)} />
+          <NoteBiblePanel
+            onInsert={(html) => editorRef.current?.insertHtml(html)}
+            onClose={() => setBibleOpen(false)}
+          />
         )}
       </div>
     </div>

@@ -80,7 +80,10 @@ export interface Note {
   reference?: string
   /** User-chosen title for a standalone note, e.g. "Sunday sermon — Romans 8". */
   title?: string
+  /** Plain-text body — always kept in sync, used for previews/search. */
   body: string
+  /** Sanitized rich-text HTML, when the note was written with formatting. */
+  bodyHtml?: string
   createdAt: number
   updatedAt: number
 }

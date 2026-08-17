@@ -46,6 +46,8 @@ export interface StandaloneNoteInput {
   title?: string
   reference?: string
   body: string
+  /** Sanitized rich-text HTML, when written with the formatting toolbar. */
+  bodyHtml?: string
 }
 
 export interface UseNotesResult {
@@ -109,6 +111,7 @@ export function useNotes(): UseNotesResult {
       title: input.title?.trim() || undefined,
       reference: input.reference?.trim() || undefined,
       body: trimmed,
+      bodyHtml: input.bodyHtml,
       createdAt: now,
       updatedAt: now,
     }
@@ -124,6 +127,7 @@ export function useNotes(): UseNotesResult {
         ...(patch.title !== undefined && { title: patch.title.trim() || undefined }),
         ...(patch.reference !== undefined && { reference: patch.reference.trim() || undefined }),
         ...(patch.body !== undefined && { body: patch.body.trim() }),
+        ...(patch.bodyHtml !== undefined && { bodyHtml: patch.bodyHtml }),
         updatedAt: Date.now(),
       }
     })

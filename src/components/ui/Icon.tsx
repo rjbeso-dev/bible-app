@@ -34,6 +34,11 @@ export type IconName =
   | 'sidebar'
   | 'cross'
   | 'user'
+  | 'bold'
+  | 'italic'
+  | 'underline'
+  | 'list'
+  | 'list-ordered'
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName
@@ -160,6 +165,33 @@ const PATHS: Record<IconName, ReactElement> = {
     <>
       <circle cx="12" cy="8" r="3.5" />
       <path d="M5 20a7 7 0 0 1 14 0" />
+    </>
+  ),
+  bold: (
+    <>
+      <path d="M6 4h6a3.5 3.5 0 0 1 0 7H6z" />
+      <path d="M6 11h7a3.5 3.5 0 0 1 0 7H6z" />
+    </>
+  ),
+  italic: <path d="M10 4h9M5 20h9M15 4l-6 16" />,
+  underline: (
+    <>
+      <path d="M6 4v6a6 6 0 0 0 12 0V4" />
+      <path d="M4 20h16" />
+    </>
+  ),
+  list: (
+    <>
+      <path d="M9 6h11M9 12h11M9 18h11" />
+      <path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" />
+    </>
+  ),
+  'list-ordered': (
+    <>
+      <path d="M9 6h11M9 12h11M9 18h11" />
+      <path d="M4.5 4.5h1v3h-1" />
+      <path d="M4 10.5h1.3L4 13h1.5" />
+      <path d="M4 16.5h1.3a.7.7 0 0 1 0 1.4H4.7a.7.7 0 0 1 0 1.4H5.3" />
     </>
   ),
 }
