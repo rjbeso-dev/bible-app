@@ -1094,6 +1094,17 @@
      this panel and needs to overlay past its edge rather than get clipped.
      The verse list's own overflow-y:auto below still scrolls independently. */
 }
+/* The book picker normally opens left-aligned (left:0), which is fine when
+   its trigger sits in a wide left-hand column. Here the trigger sits in
+   this narrow right-hand panel, so opening left-aligned pushed the (up to
+   38rem-wide) popover past the viewport's right edge and forced the whole
+   page to scroll horizontally. Open it right-aligned instead, extending
+   into the wider main column to the left. */
+.note-bible-panel .book-picker-panel {
+  left: auto;
+  right: 0;
+  transform-origin: top right;
+}
 .note-bible-panel-header {
   display: flex;
   align-items: center;
