@@ -11,8 +11,8 @@ function loadNotes(): Note[] {
   )
 }
 
-function persist(notes: Note[]): void {
-  writeJSON(STORAGE_KEYS.notes, notes)
+function persist(notes: Note[]): boolean {
+  return writeJSON(STORAGE_KEYS.notes, notes)
 }
 
 function newId(): string {
@@ -36,10 +36,19 @@ function getNotes(): Note[] {
   return current
 }
 
-function setNotes(next: Note[]): void {
+/**
+ * Persist and broadcast a new notes array. Returns false (without applying
+ * the change) if the write failed — e.g. localStorage quota exceeded, which
+ * an attached image can realistically hit. Callers that skip checking this
+ * still behave as before (best-effort), but the note composer checks it so
+ * it can tell the user their note — and any image in it — didn't actually save.
+ */
+function setNotes(next: Note[]): boolean {
+  const ok = persist(next)
+  if (!ok) return false
   current = next
-  persist(next)
   listeners.forEach((l) => l(next))
+  return true
 }
 
 export interface StandaloneNoteInput {
@@ -50,6 +59,10 @@ export interface StandaloneNoteInput {
   bodyHtml?: string
 }
 
+/** 'empty' = nothing to save (blank body); 'storage' = write failed, most
+ * likely a full localStorage quota — realistic once notes can hold images. */
+export type SaveNoteResult = { ok: true; note: Note } | { ok: false; reason: 'empty' | 'storage' }
+
 export interface UseNotesResult {
   notes: Note[]
   notesFor: (verseKey: string) => Note[]
@@ -58,9 +71,9 @@ export interface UseNotesResult {
   deleteNote: (id: string) => void
   hasNote: (verseKey: string) => boolean
   /** Create a note with no verse tie, e.g. sermon prep spanning a passage. */
-  addStandaloneNote: (input: StandaloneNoteInput) => Note | null
+  addStandaloneNote: (input: StandaloneNoteInput) => SaveNoteResult
   /** Update any combination of a note's title/reference/body (standalone or verse-tied). */
-  updateNoteFields: (id: string, patch: Partial<StandaloneNoteInput>) => void
+  updateNoteFields: (id: string, patch: Partial<StandaloneNoteInput>) => SaveNoteResult
 }
 
 export function useNotes(): UseNotesResult {
@@ -102,9 +115,9 @@ export function useNotes(): UseNotesResult {
     setNotes(next)
   }, [])
 
-  const addStandaloneNote = useCallback((input: StandaloneNoteInput): Note | null => {
+  const addStandaloneNote = useCallback((input: StandaloneNoteInput): SaveNoteResult => {
     const trimmed = input.body.trim()
-    if (!trimmed) return null
+    if (!trimmed) return { ok: false, reason: 'empty' }
     const now = Date.now()
     const note: Note = {
       id: newId(),
@@ -115,14 +128,15 @@ export function useNotes(): UseNotesResult {
       createdAt: now,
       updatedAt: now,
     }
-    setNotes([...getNotes(), note])
-    return note
+    const saved = setNotes([...getNotes(), note])
+    return saved ? { ok: true, note } : { ok: false, reason: 'storage' }
   }, [])
 
-  const updateNoteFields = useCallback((id: string, patch: Partial<StandaloneNoteInput>) => {
+  const updateNoteFields = useCallback((id: string, patch: Partial<StandaloneNoteInput>): SaveNoteResult => {
+    let updated: Note | undefined
     const next = getNotes().map((n) => {
       if (n.id !== id) return n
-      return {
+      updated = {
         ...n,
         ...(patch.title !== undefined && { title: patch.title.trim() || undefined }),
         ...(patch.reference !== undefined && { reference: patch.reference.trim() || undefined }),
@@ -130,8 +144,11 @@ export function useNotes(): UseNotesResult {
         ...(patch.bodyHtml !== undefined && { bodyHtml: patch.bodyHtml }),
         updatedAt: Date.now(),
       }
+      return updated
     })
-    setNotes(next)
+    if (!updated) return { ok: false, reason: 'storage' }
+    const saved = setNotes(next)
+    return saved ? { ok: true, note: updated } : { ok: false, reason: 'storage' }
   }, [])
 
   const deleteNote = useCallback((id: string) => {

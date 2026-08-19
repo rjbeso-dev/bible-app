@@ -22,6 +22,7 @@ export function NoteComposerPage() {
   const [hasBody, setHasBody] = useState(!!existing?.body.trim())
   const [bibleOpen, setBibleOpen] = useState(false)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
   const editorRef = useRef<RichTextEditorHandle>(null)
 
   // Editing a note that doesn't exist (bad id, or it was deleted elsewhere).
@@ -36,10 +37,19 @@ export function NoteComposerPage() {
     const { html, text } = bodyRef.current
     const trimmed = text.trim()
     if (!trimmed) return
-    if (existing) {
-      updateNoteFields(existing.id, { title, reference, body: trimmed, bodyHtml: html })
-    } else {
-      addStandaloneNote({ title, reference, body: trimmed, bodyHtml: html })
+    setSaveError(null)
+    const result = existing
+      ? updateNoteFields(existing.id, { title, reference, body: trimmed, bodyHtml: html })
+      : addStandaloneNote({ title, reference, body: trimmed, bodyHtml: html })
+    if (!result.ok) {
+      // Most likely cause: an attached image (or several) pushed this note
+      // past localStorage's quota. Stay on the page — the draft (including
+      // any images) is still intact in the editor — so the user can shrink
+      // it and retry instead of silently losing the note.
+      setSaveError(
+        'Couldn’t save this note — your browser’s storage is full. Try removing an image, or shortening the note, then save again.',
+      )
+      return
     }
     navigate('/notes')
   }
@@ -103,6 +113,20 @@ export function NoteComposerPage() {
               setHasBody(!!text.trim())
             }}
           />
+
+          {saveError && (
+            <p className="rich-editor-error" role="alert">
+              {saveError}
+              <button
+                type="button"
+                className="icon-button"
+                onClick={() => setSaveError(null)}
+                aria-label="Dismiss"
+              >
+                <Icon name="close" size={14} />
+              </button>
+            </p>
+          )}
 
           <footer className="note-composer-footer">
             {existing &&

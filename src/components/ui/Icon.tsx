@@ -40,6 +40,9 @@ export type IconName =
   | 'list'
   | 'list-ordered'
   | 'highlighter'
+  | 'image'
+  | 'download'
+  | 'file-text'
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName
@@ -201,6 +204,27 @@ const PATHS: Record<IconName, ReactElement> = {
       <path d="M8.5 13.5l7-7a2 2 0 0 1 2.8 0l1.2 1.2a2 2 0 0 1 0 2.8l-7 7-4-4z" />
       <path d="M8.5 13.5L5 17l-1 3 3-1 3.5-3.5" />
       <path d="M4 20h5" />
+    </>
+  ),
+  image: (
+    <>
+      <rect x="3.5" y="4.5" width="17" height="15" rx="1.5" />
+      <circle cx="8.5" cy="9.5" r="1.5" />
+      <path d="M4 17l5-5 3.5 3.5L17 10l3 3.5" />
+    </>
+  ),
+  download: (
+    <>
+      <path d="M12 4v11" />
+      <path d="M7.5 11.5L12 16l4.5-4.5" />
+      <path d="M4.5 19.5h15" />
+    </>
+  ),
+  'file-text': (
+    <>
+      <path d="M6.5 3.5h8l4 4v13a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1z" />
+      <path d="M14 3.5v4h4" />
+      <path d="M8.5 12.5h7M8.5 15.5h7M8.5 18h4" />
     </>
   ),
 }

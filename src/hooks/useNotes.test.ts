@@ -130,11 +130,11 @@ describe('useNotes: standalone notes (no verse tie)', () => {
   it('ignores an empty/whitespace body', async () => {
     const { renderHook, act, useNotes } = await freshNotes()
     const { result } = renderHook(() => useNotes())
-    let created: unknown
+    let created: ReturnType<typeof result.current.addStandaloneNote> | undefined
     act(() => {
       created = result.current.addStandaloneNote({ title: 'x', body: '   ' })
     })
-    expect(created).toBeNull()
+    expect(created).toEqual({ ok: false, reason: 'empty' })
     expect(result.current.notes).toHaveLength(0)
   })
 
@@ -143,7 +143,9 @@ describe('useNotes: standalone notes (no verse tie)', () => {
     const { result } = renderHook(() => useNotes())
     let id = ''
     act(() => {
-      id = result.current.addStandaloneNote({ title: 'first', body: 'draft' })!.id
+      const saved = result.current.addStandaloneNote({ title: 'first', body: 'draft' })
+      if (!saved.ok) throw new Error('expected save to succeed')
+      id = saved.note.id
     })
     act(() => {
       result.current.updateNoteFields(id, { title: 'revised' })

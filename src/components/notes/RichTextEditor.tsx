@@ -5,9 +5,11 @@ import {
   useImperativeHandle,
   useRef,
   useState,
+  type ChangeEvent,
 } from 'react'
 import { Icon, type IconName } from '../ui/Icon'
 import { sanitizeNoteHtml } from '../../lib/sanitizeNoteHtml'
+import { fileToDataUrl, ImageTooLargeError } from '../../lib/imageToDataUrl'
 
 const FONT_STACKS: { label: string; value: string }[] = [
   { label: 'Serif', value: "'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif" },
@@ -143,46 +145,77 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
       [restoreSelection, emitChange],
     )
 
-    useImperativeHandle(ref, () => ({
-      insertHtml: (html: string) => {
-        const el = editorRef.current
-        if (!el) return
-        el.focus()
+    // Insert via the Range API rather than execCommand('insertHTML'): that
+    // command re-merges the inserted markup with whatever inline formatting
+    // is active at the caret (observed producing stray font-size/
+    // background-color spans around an inserted verse quote), where
+    // Range.insertNode() places exactly the nodes we built. Shared by the
+    // exposed insertHtml handle (verse quotes from the Bible panel) and the
+    // image-attach button below.
+    const insertHtmlAtCursor = useCallback((html: string) => {
+      const el = editorRef.current
+      if (!el) return
+      el.focus()
 
-        // Insert via the Range API rather than execCommand('insertHTML'):
-        // that command re-merges the inserted markup with whatever inline
-        // formatting is active at the caret (observed producing stray
-        // font-size/background-color spans around an inserted verse quote),
-        // where Range.insertNode() places exactly the nodes we built.
-        let range: Range
-        if (savedRangeRef.current && el.contains(savedRangeRef.current.commonAncestorContainer)) {
-          range = savedRangeRef.current
-        } else {
-          range = document.createRange()
-          range.selectNodeContents(el)
-          range.collapse(false)
+      let range: Range
+      if (savedRangeRef.current && el.contains(savedRangeRef.current.commonAncestorContainer)) {
+        range = savedRangeRef.current
+      } else {
+        range = document.createRange()
+        range.selectNodeContents(el)
+        range.collapse(false)
+      }
+
+      const template = document.createElement('template')
+      template.innerHTML = sanitizeNoteHtml(html)
+      const fragment = template.content
+      const lastNode = fragment.lastChild
+
+      range.deleteContents()
+      range.insertNode(fragment)
+
+      if (lastNode) {
+        const sel = window.getSelection()
+        const after = document.createRange()
+        after.setStartAfter(lastNode)
+        after.collapse(true)
+        sel?.removeAllRanges()
+        sel?.addRange(after)
+        savedRangeRef.current = after.cloneRange()
+      }
+
+      emitChange()
+    }, [emitChange])
+
+    const fileInputRef = useRef<HTMLInputElement>(null)
+    const [imageError, setImageError] = useState<string | null>(null)
+    const [imageBusy, setImageBusy] = useState(false)
+
+    const onImageSelected = useCallback(
+      async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        e.target.value = '' // allow picking the same file again later
+        if (!file) return
+        setImageError(null)
+        setImageBusy(true)
+        try {
+          const dataUrl = await fileToDataUrl(file)
+          insertHtmlAtCursor(`<img src="${dataUrl}" alt="${file.name.replace(/"/g, '')}">`)
+        } catch (err) {
+          setImageError(
+            err instanceof ImageTooLargeError
+              ? err.message
+              : 'Could not attach that image.',
+          )
+        } finally {
+          setImageBusy(false)
         }
-
-        const template = document.createElement('template')
-        template.innerHTML = sanitizeNoteHtml(html)
-        const fragment = template.content
-        const lastNode = fragment.lastChild
-
-        range.deleteContents()
-        range.insertNode(fragment)
-
-        if (lastNode) {
-          const sel = window.getSelection()
-          const after = document.createRange()
-          after.setStartAfter(lastNode)
-          after.collapse(true)
-          sel?.removeAllRanges()
-          sel?.addRange(after)
-          savedRangeRef.current = after.cloneRange()
-        }
-
-        emitChange()
       },
+      [insertHtmlAtCursor],
+    )
+
+    useImperativeHandle(ref, () => ({
+      insertHtml: insertHtmlAtCursor,
       focus: () => editorRef.current?.focus(),
     }))
 
@@ -245,6 +278,22 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
 
           <span className="rich-editor-toolbar-divider" aria-hidden="true" />
 
+          <ToolbarButton
+            label={imageBusy ? 'Attaching image…' : 'Attach image'}
+            icon="image"
+            onClick={() => fileInputRef.current?.click()}
+          />
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            disabled={imageBusy}
+            onChange={onImageSelected}
+          />
+
+          <span className="rich-editor-toolbar-divider" aria-hidden="true" />
+
           <select
             className="rich-editor-select"
             aria-label="Font"
@@ -285,6 +334,15 @@ export const RichTextEditor = forwardRef<RichTextEditorHandle, RichTextEditorPro
             ))}
           </select>
         </div>
+
+        {imageError && (
+          <p className="rich-editor-error" role="alert">
+            {imageError}
+            <button type="button" className="icon-button" onClick={() => setImageError(null)} aria-label="Dismiss">
+              <Icon name="close" size={14} />
+            </button>
+          </p>
+        )}
 
         <div
           ref={editorRef}

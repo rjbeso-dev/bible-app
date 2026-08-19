@@ -1070,6 +1070,25 @@
 .rich-editor-body .note-quote strong {
   color: var(--accent);
 }
+.rich-editor-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 0.4em 0;
+  display: block;
+}
+.rich-editor-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.7rem;
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  color: var(--danger);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
 
 .note-composer-footer {
   display: flex;
