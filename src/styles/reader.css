@@ -856,6 +856,51 @@
   flex: 1;
   margin: 0;
 }
+.note-export-menu {
+  position: relative;
+  display: inline-flex;
+}
+.note-export-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 50;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(16rem, 92vw);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 0.35rem;
+  transform-origin: top right;
+  animation: pop-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .note-export-panel {
+    animation: none;
+  }
+}
+.note-export-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.note-export-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
 .note-composer-verse-tag {
   margin: -0.3rem 0 0.2rem;
   font-size: 0.85rem;

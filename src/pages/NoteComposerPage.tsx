@@ -1,10 +1,15 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { useNotes } from '../hooks/useNotes'
 import { NoteBiblePanel } from '../components/notes/NoteBiblePanel'
 import { RichTextEditor, type RichTextEditorHandle } from '../components/notes/RichTextEditor'
-import { plainTextToHtml } from '../lib/sanitizeNoteHtml'
+import { plainTextToHtml, sanitizeNoteHtml } from '../lib/sanitizeNoteHtml'
+import { parseNoteHtml, noteFileName } from '../lib/noteDocument'
+import { exportNoteToPdf } from '../lib/exportNoteToPdf'
+import { exportNoteToDocx } from '../lib/exportNoteToDocx'
 import { Icon } from '../components/ui/Icon'
+
+type ExportFormat = 'pdf' | 'docx'
 
 /** Full-page note composer: write a long-form note (sermon prep, study
  * outline) with a formatting toolbar and an optional side panel to browse
@@ -23,7 +28,19 @@ export function NoteComposerPage() {
   const [bibleOpen, setBibleOpen] = useState(false)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [exportOpen, setExportOpen] = useState(false)
+  const [exportBusy, setExportBusy] = useState(false)
+  const [exportError, setExportError] = useState<string | null>(null)
   const editorRef = useRef<RichTextEditorHandle>(null)
+
+  useEffect(() => {
+    if (!exportOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setExportOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [exportOpen])
 
   // Editing a note that doesn't exist (bad id, or it was deleted elsewhere).
   if (id && !existing) {
@@ -60,6 +77,27 @@ export function NoteComposerPage() {
     navigate('/notes')
   }
 
+  const runExport = async (format: ExportFormat) => {
+    setExportOpen(false)
+    const { html, text } = bodyRef.current
+    if (!text.trim()) return
+    setExportError(null)
+    setExportBusy(true)
+    try {
+      const blocks = await parseNoteHtml(sanitizeNoteHtml(html))
+      const fileName = noteFileName(title || reference || 'Note')
+      if (format === 'pdf') {
+        exportNoteToPdf(blocks, fileName, title.trim() || undefined)
+      } else {
+        await exportNoteToDocx(blocks, fileName, title.trim() || undefined)
+      }
+    } catch {
+      setExportError('Couldn’t export this note. Try again.')
+    } finally {
+      setExportBusy(false)
+    }
+  }
+
   return (
     <div className="note-composer-page">
       <div className="note-composer-layout">
@@ -74,6 +112,41 @@ export function NoteComposerPage() {
               <Icon name="chevron-left" />
             </button>
             <h1 className="page-title">{existing ? 'Edit note' : 'New note'}</h1>
+            <div className="note-export-menu">
+              <button
+                type="button"
+                className="button ghost"
+                aria-haspopup="menu"
+                aria-expanded={exportOpen}
+                disabled={!hasBody || exportBusy}
+                onClick={() => setExportOpen((o) => !o)}
+              >
+                <Icon name="download" size={16} /> {exportBusy ? 'Exporting…' : 'Export'}
+              </button>
+              {exportOpen && (
+                <>
+                  <div className="popover-backdrop" onClick={() => setExportOpen(false)} aria-hidden="true" />
+                  <div className="note-export-panel" role="menu" aria-label="Export note">
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="note-export-item"
+                      onClick={() => runExport('pdf')}
+                    >
+                      <Icon name="file-text" size={16} /> Export as PDF
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="note-export-item"
+                      onClick={() => runExport('docx')}
+                    >
+                      <Icon name="file-text" size={16} /> Export as Word (.docx)
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
             <button
               type="button"
               className={'button ghost' + (bibleOpen ? ' is-active' : '')}
@@ -121,6 +194,20 @@ export function NoteComposerPage() {
                 type="button"
                 className="icon-button"
                 onClick={() => setSaveError(null)}
+                aria-label="Dismiss"
+              >
+                <Icon name="close" size={14} />
+              </button>
+            </p>
+          )}
+
+          {exportError && (
+            <p className="rich-editor-error" role="alert">
+              {exportError}
+              <button
+                type="button"
+                className="icon-button"
+                onClick={() => setExportError(null)}
                 aria-label="Dismiss"
               >
                 <Icon name="close" size={14} />
