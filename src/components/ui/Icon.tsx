@@ -39,6 +39,7 @@ export type IconName =
   | 'underline'
   | 'list'
   | 'list-ordered'
+  | 'highlighter'
 
 interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'name'> {
   name: IconName
@@ -192,6 +193,14 @@ const PATHS: Record<IconName, ReactElement> = {
       <path d="M4.5 4.5h1v3h-1" />
       <path d="M4 10.5h1.3L4 13h1.5" />
       <path d="M4 16.5h1.3a.7.7 0 0 1 0 1.4H4.7a.7.7 0 0 1 0 1.4H5.3" />
+    </>
+  ),
+  // A marker/highlighter pen touching down, with a mark left on the page.
+  highlighter: (
+    <>
+      <path d="M8.5 13.5l7-7a2 2 0 0 1 2.8 0l1.2 1.2a2 2 0 0 1 0 2.8l-7 7-4-4z" />
+      <path d="M8.5 13.5L5 17l-1 3 3-1 3.5-3.5" />
+      <path d="M4 20h5" />
     </>
   ),
 }

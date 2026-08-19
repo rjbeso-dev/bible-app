@@ -891,7 +891,10 @@
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
   background: var(--surface);
-  overflow: hidden;
+  /* Not overflow:hidden — the color-picker dropdowns are positioned
+     relative to the toolbar and need to overlay past the editor body
+     below rather than get clipped at its edge. Rounded corners are
+     applied to the toolbar/body individually instead. */
 }
 .rich-editor-toolbar {
   display: flex;
@@ -900,6 +903,7 @@
   gap: 0.25rem;
   padding: 0.4rem;
   border-bottom: 1px solid var(--border);
+  border-radius: calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0 0;
   background: var(--bg-sunken);
 }
 .rich-editor-tool {
@@ -939,14 +943,9 @@
 .rich-editor-select:hover {
   color: var(--text);
 }
-.rich-editor-swatches {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
 .rich-editor-swatch {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 999px;
   border: 1px solid var(--border-strong);
   cursor: pointer;
@@ -955,27 +954,80 @@
 .rich-editor-swatch:hover {
   transform: scale(1.12);
 }
-.rich-editor-swatch-none {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface);
-  color: var(--text-faint);
+
+/* Word-style color tools: a trigger button (icon/letter + an underline bar
+   showing the last-used color) that opens a dropdown swatch grid. */
+.rich-editor-color-picker {
+  position: relative;
 }
-.rich-editor-swatch-letter {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--surface);
+.rich-editor-color-trigger {
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-bottom: 0.25rem;
+}
+.rich-editor-color-letter {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 0.8rem;
-  /* color is set inline per-swatch (the actual text color it applies) */
+  font-size: 0.85rem;
+  line-height: 1;
 }
+.rich-editor-color-bar {
+  width: 1.1rem;
+  height: 0.18rem;
+  border-radius: 999px;
+  flex: none;
+}
+.rich-editor-color-popover {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.4rem);
+  z-index: 50;
+  width: 12rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 0.6rem;
+  transform-origin: top left;
+  animation: pop-in var(--dur-fast) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rich-editor-color-popover {
+    animation: none;
+  }
+}
+.rich-editor-color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.rich-editor-color-none {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.3rem 0.2rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.rich-editor-color-none:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
 .rich-editor-body {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  border-radius: 0 0 calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px);
   font-family: var(--font-serif);
   font-size: 1.05rem;
   line-height: 1.7;
