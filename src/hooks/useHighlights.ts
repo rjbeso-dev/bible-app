@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { Highlight, HighlightColor } from '../types'
 import { STORAGE_KEYS, readJSON, writeJSON } from '../lib/storage'
+import { useAuthGate } from '../context/useAuthGate'
 
 type HighlightMap = Record<string, Highlight>
 
@@ -46,6 +47,7 @@ export interface UseHighlightsResult {
 
 export function useHighlights(): UseHighlightsResult {
   const [highlights, setState] = useState<HighlightMap>(getMap)
+  const { requireAuth } = useAuthGate()
 
   useEffect(() => {
     const listener: Listener = (next) => setState(next)
@@ -56,12 +58,17 @@ export function useHighlights(): UseHighlightsResult {
     }
   }, [])
 
-  const setHighlight = useCallback((verseKey: string, color: HighlightColor) => {
-    setMap({
-      ...getMap(),
-      [verseKey]: { verseKey, color, updatedAt: Date.now() },
-    })
-  }, [])
+  const setHighlight = useCallback(
+    (verseKey: string, color: HighlightColor) => {
+      requireAuth(() => {
+        setMap({
+          ...getMap(),
+          [verseKey]: { verseKey, color, updatedAt: Date.now() },
+        })
+      }, 'Sign in to save your highlights.')
+    },
+    [requireAuth],
+  )
 
   const removeHighlight = useCallback((verseKey: string) => {
     const next = { ...getMap() }
@@ -69,16 +76,21 @@ export function useHighlights(): UseHighlightsResult {
     setMap(next)
   }, [])
 
-  const toggleHighlight = useCallback((verseKey: string, color: HighlightColor) => {
-    const existing = getMap()[verseKey]
-    if (existing && existing.color === color) {
-      const next = { ...getMap() }
-      delete next[verseKey]
-      setMap(next)
-    } else {
-      setMap({ ...getMap(), [verseKey]: { verseKey, color, updatedAt: Date.now() } })
-    }
-  }, [])
+  const toggleHighlight = useCallback(
+    (verseKey: string, color: HighlightColor) => {
+      requireAuth(() => {
+        const existing = getMap()[verseKey]
+        if (existing && existing.color === color) {
+          const next = { ...getMap() }
+          delete next[verseKey]
+          setMap(next)
+        } else {
+          setMap({ ...getMap(), [verseKey]: { verseKey, color, updatedAt: Date.now() } })
+        }
+      }, 'Sign in to save your highlights.')
+    },
+    [requireAuth],
+  )
 
   const colorFor = useCallback(
     (verseKey: string): HighlightColor | null => highlights[verseKey]?.color ?? null,

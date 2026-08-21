@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams, Navigate } from 'react-router-dom'
 import { useNotes } from '../hooks/useNotes'
+import { useAuth } from '../context/useAuth'
+import { useAuthGate } from '../context/useAuthGate'
 import { NoteBiblePanel } from '../components/notes/NoteBiblePanel'
 import { RichTextEditor, type RichTextEditorHandle } from '../components/notes/RichTextEditor'
 import { plainTextToHtml, sanitizeNoteHtml } from '../lib/sanitizeNoteHtml'
@@ -19,7 +21,10 @@ export function NoteComposerPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { notes, addStandaloneNote, updateNoteFields, deleteNote } = useNotes()
+  const { user, enabled } = useAuth()
+  const { promptSignIn } = useAuthGate()
   const existing = id ? notes.find((n) => n.id === id) : undefined
+  const blockedForSignIn = !existing && enabled && !user
 
   const [title, setTitle] = useState(existing?.title ?? '')
   const [reference, setReference] = useState(existing?.reference ?? '')
@@ -42,8 +47,19 @@ export function NoteComposerPage() {
     return () => window.removeEventListener('keydown', onKey)
   }, [exportOpen])
 
+  // Direct navigation to /notes/new (or a refresh mid-draft) bypasses the
+  // gate on the "New note" buttons that link here — catch it at the route
+  // itself too, same as the "note doesn't exist" bounce below.
+  useEffect(() => {
+    if (blockedForSignIn) promptSignIn('Sign in to write and save notes.')
+  }, [blockedForSignIn, promptSignIn])
+
   // Editing a note that doesn't exist (bad id, or it was deleted elsewhere).
   if (id && !existing) {
+    return <Navigate to="/notes" replace />
+  }
+
+  if (blockedForSignIn) {
     return <Navigate to="/notes" replace />
   }
 

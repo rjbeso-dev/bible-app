@@ -711,6 +711,10 @@ a:hover {
 .modal-footer-spacer {
   flex: 1;
 }
+.sign-in-gate-message {
+  color: var(--text-muted);
+  line-height: 1.5;
+}
 
 .video-modal {
   max-width: 56rem;

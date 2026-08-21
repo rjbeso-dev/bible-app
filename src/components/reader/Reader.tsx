@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSettings } from '../../context/useSettings'
+import { useAuthGate } from '../../context/useAuthGate'
 import { useChapter } from '../../hooks/useChapter'
 import { useLastRead } from '../../hooks/useLastRead'
+import { useNotes } from '../../hooks/useNotes'
 import { useReadingProgress } from '../../hooks/useReadingProgress'
 import { getBook } from '../../data/books'
 import {
@@ -35,6 +37,8 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
   const { settings, setPrimaryTranslation, toggleParallel } = useSettings()
   const { record } = useLastRead()
   const { recordRead } = useReadingProgress()
+  const { notesFor } = useNotes()
+  const { requireAuth } = useAuthGate()
 
   const meta = getBook(book)
   const primary = useChapter(book, chapter, settings.primaryTranslation)
@@ -83,6 +87,21 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
       setSelectedVerse(initialVerse)
     }
   }, [initialVerse, primary.status, book, chapter])
+
+  // Opening a note for a verse that already has one is just editing
+  // existing local data, so it's never gated — only starting a brand-new
+  // note requires sign-in.
+  const openNote = useCallback(
+    (v: number) => {
+      const key = makeKey(book, chapter, v)
+      if (notesFor(key).length > 0) {
+        setNoteVerse(v)
+        return
+      }
+      requireAuth(() => setNoteVerse(v), 'Sign in to write and save notes.')
+    },
+    [book, chapter, notesFor, requireAuth],
+  )
 
   // Arrow-key chapter navigation (ignoring form fields and modifier combos).
   const goPrev = useCallback(() => {
@@ -215,7 +234,7 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
                 selectedVerse={selectedVerse}
                 inlineActions={!showStudyPanel}
                 onSelectVerse={setSelectedVerse}
-                onOpenNote={setNoteVerse}
+                onOpenNote={openNote}
                 onOpenContext={setContextVerse}
               />
             )}
@@ -228,7 +247,7 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
                 selectedVerse={selectedVerse}
                 inlineActions={!showStudyPanel}
                 onSelectVerse={setSelectedVerse}
-                onOpenNote={setNoteVerse}
+                onOpenNote={openNote}
                 onOpenContext={setContextVerse}
               />
             )}
@@ -244,7 +263,7 @@ export function Reader({ book, chapter, initialVerse }: ReaderProps) {
             book={book}
             chapter={chapter}
             verse={selectedVerse}
-            onOpenNote={(v) => setNoteVerse(v)}
+            onOpenNote={openNote}
             onClose={() => setStudyOpen(false)}
           />
         )}

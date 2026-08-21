@@ -5,6 +5,7 @@ import App from './App'
 import { SettingsProvider } from './context/SettingsProvider'
 import { AudioProvider } from './context/AudioProvider'
 import { AuthProvider } from './context/AuthProvider'
+import { AuthGateProvider } from './context/AuthGateProvider'
 import { SyncProvider } from './context/SyncProvider'
 import './styles/globals.css'
 import './styles/reader.css'
@@ -20,9 +21,11 @@ createRoot(rootEl).render(
       <SettingsProvider>
         <AudioProvider>
           <AuthProvider>
-            <SyncProvider>
-              <App />
-            </SyncProvider>
+            <AuthGateProvider>
+              <SyncProvider>
+                <App />
+              </SyncProvider>
+            </AuthGateProvider>
           </AuthProvider>
         </AudioProvider>
       </SettingsProvider>

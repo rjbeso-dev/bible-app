@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useNotes } from '../../hooks/useNotes'
+import { useAuthGate } from '../../context/useAuthGate'
 import { BOOKS, getBook } from '../../data/books'
 import { parseVerseKey } from '../../lib/references'
 import type { Note } from '../../types'
@@ -29,6 +30,12 @@ interface BookGroup {
 
 export function NotesListPage() {
   const { notes, deleteNote } = useNotes()
+  const navigate = useNavigate()
+  const { requireAuth } = useAuthGate()
+
+  const newNote = () => {
+    requireAuth(() => navigate('/notes/new'), 'Sign in to write and save notes.')
+  }
 
   const { groups, general } = useMemo(() => {
     const byBook = new Map<string, BookGroup>()
@@ -62,9 +69,9 @@ export function NotesListPage() {
       <div className="notes-page">
         <div className="notes-page-header">
           <h1 className="page-title">Notes</h1>
-          <Link to="/notes/new" className="button primary">
+          <button type="button" className="button primary" onClick={newNote}>
             <Icon name="plus" size={16} /> New note
-          </Link>
+          </button>
         </div>
         <div className="empty-state">
           <p className="empty-state-lead">No notes yet.</p>
@@ -72,9 +79,9 @@ export function NotesListPage() {
             Write a sermon outline or study note with the Bible open beside you, or
             open a chapter and tap a verse to add a quick note as you read.
           </p>
-          <Link to="/notes/new" className="button primary">
+          <button type="button" className="button primary" onClick={newNote}>
             Write a note
-          </Link>
+          </button>
         </div>
       </div>
     )
@@ -86,9 +93,9 @@ export function NotesListPage() {
         <h1 className="page-title">Notes</h1>
         <div className="notes-page-header-actions">
           <span className="muted">{notes.length} note{notes.length === 1 ? '' : 's'}</span>
-          <Link to="/notes/new" className="button primary">
+          <button type="button" className="button primary" onClick={newNote}>
             <Icon name="plus" size={16} /> New note
-          </Link>
+          </button>
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNotes } from '../../hooks/useNotes'
+import { useAuthGate } from '../../context/useAuthGate'
 import { formatReference, parseVerseKey } from '../../lib/references'
 import { Icon } from '../ui/Icon'
 
@@ -11,6 +12,7 @@ interface NotePopoverProps {
 /** Modal for creating/editing/deleting notes attached to a single verse. */
 export function NotePopover({ verseKey, onClose }: NotePopoverProps) {
   const { notesFor, addNote, updateNote, deleteNote } = useNotes()
+  const { requireAuth } = useAuthGate()
   const existing = notesFor(verseKey)
   const parsed = parseVerseKey(verseKey)
   const reference = parsed
@@ -41,10 +43,17 @@ export function NotePopover({ verseKey, onClose }: NotePopoverProps) {
     if (!body) return
     if (editingId) {
       updateNote(editingId, body)
-    } else {
-      addNote(verseKey, reference, body)
+      onClose()
+      return
     }
-    onClose()
+    // Defense in depth: the panel that opens this popover already gates
+    // starting a brand-new note behind sign-in, but "New note" below (for
+    // a verse that already has one) is a second entry point into the same
+    // create path — the check belongs here too, not just on the way in.
+    requireAuth(() => {
+      addNote(verseKey, reference, body)
+      onClose()
+    }, 'Sign in to write and save notes.')
   }
 
   const startNew = () => {
