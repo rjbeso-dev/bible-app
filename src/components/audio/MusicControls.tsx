@@ -58,13 +58,13 @@ export function MusicControls({ variant = 'header' }: MusicControlsProps = {}) {
         aria-label={isPlaying ? 'Background sound (playing)' : 'Background sound'}
       >
         {isPlaying ? (
-          <span className="eq" aria-hidden="true">
+          <span className={'eq' + (isRail ? ' eq-rail' : '')} aria-hidden="true">
             <span />
             <span />
             <span />
           </span>
         ) : (
-          <Icon name="music" />
+          <Icon name="music" size={isRail ? 24 : 18} />
         )}
         {isRail && <span className="rail-item-label">Sound</span>}
       </button>

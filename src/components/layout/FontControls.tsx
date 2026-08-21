@@ -37,7 +37,7 @@ export function FontControls({ variant = 'header' }: FontControlsProps = {}) {
         title="Reading options"
         aria-label="Reading options"
       >
-        <Icon name="type" />
+        <Icon name="type" size={isRail ? 24 : 18} />
         {isRail && <span className="rail-item-label">Display</span>}
       </button>
 

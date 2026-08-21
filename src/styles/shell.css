@@ -87,7 +87,7 @@
   background: transparent;
   color: var(--text-muted);
   font: inherit;
-  font-weight: 600;
+  font-weight: 400;
   font-size: 0.95rem;
   text-align: left;
   /* Left padding keeps the icon at a fixed x (≈ rail centre when collapsed) so
@@ -99,6 +99,13 @@
 }
 .rail-item .icon {
   transition: transform 0.15s ease;
+}
+/* The playing-state equalizer (13px of bars) replaces the 24px music icon in
+   the Sound rail item — widen its box to match so the label after it still
+   lines up with every other row's label. */
+.rail-item .eq-rail {
+  width: 24px;
+  justify-content: center;
 }
 .rail-item:hover {
   background: var(--surface-hover);
@@ -122,7 +129,7 @@
    filled pill or bar. */
 .rail-item.is-active {
   color: var(--accent);
-  font-weight: 700;
+  font-weight: 600;
 }
 .rail-item.is-active:hover {
   background: transparent;

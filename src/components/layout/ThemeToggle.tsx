@@ -29,7 +29,7 @@ export function ThemeToggle({ variant = 'header' }: ThemeToggleProps = {}) {
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
     >
-      <Icon name={isDark ? 'sun' : 'moon'} />
+      <Icon name={isDark ? 'sun' : 'moon'} size={isRail ? 24 : 18} />
       {isRail && <span className="rail-item-label">Theme</span>}
     </button>
   )
