@@ -9,6 +9,8 @@ export interface BookMeta {
   name: string
   testament: Testament
   chapterCount: number
+  /** Standard (KJV/WEB) versification verse count. */
+  verseCount: number
   /** Short 1-2 sentence introduction. */
   intro: string
   /** Traditional/most-accepted author, honest about disputed attribution. */
@@ -23,6 +25,16 @@ export interface BookMeta {
   genre: string
   /** Short phrase of key themes. */
   themes: string
+  /** 1-2 sentence expansion of `themes` for the fuller book-overview card. */
+  keyThemesDetail: string
+  /** Why the book was written, as 2 short statements. */
+  purpose: string[]
+  /** A simple chapter-range (or verse-range, for 1-chapter books) outline. */
+  structure: { range: string; label: string }[]
+  /** A representative verse, e.g. "Joshua 24:15" — linked into the reader
+   * rather than stored as text, so it always shows in the reader's own
+   * translation rather than a hardcoded copy. */
+  keyVerseRef: string
 }
 
 export interface Verse {
