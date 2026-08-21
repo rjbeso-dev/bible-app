@@ -470,11 +470,17 @@
 .book-intro-purpose {
   margin: 0;
   padding-left: 1.1rem;
-  color: var(--text-muted);
+  color: var(--text);
   line-height: 1.55;
 }
 .book-intro-purpose li + li {
   margin-top: 0.35rem;
+}
+/* Key themes reuses .book-intro-body (shared with the top overview
+   paragraph, which stays muted) — scope the brighter color to just this
+   instance so the two don't drift out of sync with each other. */
+.book-intro-split .book-intro-body {
+  color: var(--text);
 }
 .book-intro-structure {
   margin: 0;
@@ -497,7 +503,7 @@
   color: var(--text);
 }
 .book-intro-structure li span:last-child {
-  color: var(--text-muted);
+  color: var(--text);
   font-size: 0.9rem;
   line-height: 1.5;
 }
